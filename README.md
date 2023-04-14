@@ -17,4 +17,3 @@ yarn lint
 ## docs and tutorial
 https://polkadot.js.org/docs/api/examples/promise/typegen/
 
-- edgeware.json provided as reference of a known good metadata for debugging purposes.

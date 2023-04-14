@@ -4,7 +4,7 @@
 import { Struct } from '@polkadot/types/codec';
 import { Bytes, Text, u32, u64 } from '@polkadot/types/primitive';
 import { AccountId } from '@polkadot/types/interfaces/runtime';
-import { VoteStage } from 'sample-polkadotjs-typegen/interfaces/voting';
+import { VoteStage } from 'karmachain-js/interfaces/voting';
 
 /** @name ProposalContents */
 export interface ProposalContents extends Bytes {}
