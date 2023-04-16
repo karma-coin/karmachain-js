@@ -683,6 +683,10 @@ declare module '@polkadot/api-base/types/storage' {
        **/
       now: AugmentedQuery<ApiType, () => Observable<u64>, []>;
     };
+    transactionIndexer: {
+      accountTransactions: AugmentedQuery<ApiType, (arg: AccountId32 | string | Uint8Array) => Observable<Option<Vec<ITuple<[u32, u32]>>>>, [AccountId32]>;
+      txHashes: AugmentedQuery<ApiType, (arg: H256 | string | Uint8Array) => Observable<Option<ITuple<[u32, u32]>>>, [H256]>;
+    };
     transactionPayment: {
       nextFeeMultiplier: AugmentedQuery<ApiType, () => Observable<u128>, []>;
       storageVersion: AugmentedQuery<ApiType, () => Observable<PalletTransactionPaymentReleases>, []>;

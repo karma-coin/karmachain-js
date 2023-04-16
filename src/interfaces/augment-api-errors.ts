@@ -402,6 +402,12 @@ declare module '@polkadot/api-base/types/errors' {
        **/
       SpecVersionNeedsToIncrease: AugmentedError<ApiType>;
     };
+    transactionIndexer: {
+      /**
+       * Attempted to call `store` outside of block execution.
+       **/
+      BadContext: AugmentedError<ApiType>;
+    };
     voterList: {
       /**
        * A error in the list interface implementation.
