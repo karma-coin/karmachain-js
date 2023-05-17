@@ -18,3 +18,12 @@ yarn lint
 
 ## docs and tutorial
 https://polkadot.js.org/docs/api/examples/promise/typegen/
+
+## Test
+
+Firstly need to run local Karmachain node in verifier node. More information about node configuration
+can be found in tests documentation.
+
+```bash
+yarn test
+```

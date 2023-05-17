@@ -10,63 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a094fba0-03f4-4057-b6c8-c8de3869dbef" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/interfaces/chain/definitions.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/chain/definitions.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/chain/definitions.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/chain/index.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/chain/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/chain/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/chain/types.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/chain/types.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/chain/types.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/events/definitions.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/events/definitions.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/events/definitions.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/events/index.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/events/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/events/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/events/types.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/events/types.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/events/types.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/identity/definitions.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/identity/definitions.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/identity/definitions.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/identity/index.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/identity/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/identity/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/identity/types.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/identity/types.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/identity/types.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/transactions/definitions.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/transactions/definitions.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/transactions/definitions.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/transactions/index.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/transactions/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/transactions/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/transactions/types.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/transactions/types.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/transactions/types.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/verifier/definitions.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/verifier/definitions.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/verifier/definitions.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/verifier/index.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/verifier/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/verifier/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/verifier/types.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/verifier/types.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/interfaces/verifier/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/karmachain-js.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/augment-api-rpc.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/augment-api-rpc.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/augment-types.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/augment-types.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/definitions.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/definitions.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/definitions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/definitions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/definitions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/definitions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +44,7 @@
     "WebServerToolWindowFactoryState": "false",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "Merging 2-js-tests-for-node-rpc",
+    "git-widget-placeholder": "2-js-tests-for-node-rpc",
     "javascript.nodejs.core.library.configured.version": "19.7.0",
     "javascript.nodejs.core.library.typings.version": "20.1.4",
     "last_opened_file_path": "/Users/danilkyrieiev/Documents/inc4/karmacoin/karmachain-js",
@@ -125,7 +69,7 @@
       <workItem from="1684096175380" duration="14054000" />
       <workItem from="1684224038957" duration="1552000" />
       <workItem from="1684225597360" duration="41388000" />
-      <workItem from="1684338360212" duration="91000" />
+      <workItem from="1684338360212" duration="497000" />
     </task>
     <servers />
   </component>
