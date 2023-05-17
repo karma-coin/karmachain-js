@@ -119,6 +119,7 @@ export default {
       },
       getLeaderBoard: {
         description: 'Provides info about karma rewards period leaderboard',
+        params: [],
         type: 'Vec<LeaderboardEntry>'
       }
     }

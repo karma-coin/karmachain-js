@@ -105,6 +105,7 @@ declare const _default: {
             };
             getLeaderBoard: {
                 description: string;
+                params: never[];
                 type: string;
             };
         };

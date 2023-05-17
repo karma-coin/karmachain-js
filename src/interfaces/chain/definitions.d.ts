@@ -84,10 +84,12 @@ declare const _default: {
             };
             getBlockchainData: {
                 description: string;
+                params: never[];
                 type: string;
             };
             getGenesisData: {
                 description: string;
+                params: never[];
                 type: string;
             };
         };

@@ -94,10 +94,12 @@ export default {
       },
       getBlockchainData: {
         description: 'Provides information about current blockchain state',
+        params: [],
         type: 'BlockchainStats'
       },
       getGenesisData: {
         description: 'Provides information about blockchain genesis config',
+        params: [],
         type: 'GenesisData'
       }
     }
