@@ -4,8 +4,6 @@ import * as definitions from "../src/interfaces/definitions.js";
 import { decodeAddress } from "@polkadot/util-crypto";
 
 export const BYPASS_TOKEN = "dummy";
-// Alice AccountId
-export const ALICE = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY";
 // Amount of tokens equal to one KarmaCoin
 export const KCoin = 1000000;
 // Character trait id for mindful trait

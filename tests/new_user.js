@@ -1,8 +1,15 @@
+/**
+ * This tests assumes:
+ *  * node setup and available by address `ws://127.0.0.1:9944`,
+ *  * node run in verifier mode
+ *  * Alice account is a phone verifier
+ *  * Bypass token equal `dummy`
+ *  * Alice have balance enough to cover balance transfer 3 KC + transactions fees
+ */
+
 import {
   init,
   delay,
-  BYPASS_TOKEN,
-  ALICE,
   randomString,
   call_new_user,
   MINDFUL,
@@ -209,5 +216,3 @@ test("Payment transaction (w/o an appreciation) between a user and non-user. The
   // Coins send with appreciation + signup reward
   t.assert(infoAfterRegistration.balance === KCoin + 10 * KCoin);
 });
-
-test.todo("Update user name.");
