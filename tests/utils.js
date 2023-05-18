@@ -2,6 +2,7 @@
 import { ApiPromise, WsProvider } from "@polkadot/api";
 import * as definitions from "../src/interfaces/definitions.js";
 import { decodeAddress } from "@polkadot/util-crypto";
+import { mnemonicGenerate } from "@polkadot/util-crypto";
 
 export const BYPASS_TOKEN = "dummy";
 // Amount of tokens equal to one KarmaCoin
@@ -58,6 +59,20 @@ export function randomString(len, charSet) {
     randomString += charSet.substring(randomPoz, randomPoz + 1);
   }
   return randomString;
+}
+
+export function generateUser(keyring) {
+  // Generating random username
+  const username = randomString(5);
+  // Generating random phone number
+  const phoneNumber = randomString(10, "01234567890");
+  // Generating mnemonic and keys pair
+  const mnemonic = mnemonicGenerate();
+  const pair = keyring.addFromUri(mnemonic, {
+    name: username,
+  });
+
+  return { username, phoneNumber, pair };
 }
 
 export async function call_new_user(api, pair, username, phoneNumber) {
