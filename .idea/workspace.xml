@@ -11,52 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a094fba0-03f4-4057-b6c8-c8de3869dbef" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/augment-api-consts.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/augment-api-consts.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/augment-api-errors.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/augment-api-errors.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/augment-api-events.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/augment-api-events.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/augment-api-query.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/augment-api-query.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/augment-api-rpc.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/augment-api-rpc.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/augment-api-runtime.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/augment-api-runtime.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/augment-api-tx.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/augment-api-tx.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/augment-api.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/augment-api.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/augment-types.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/augment-types.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/chain/definitions.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/chain/definitions.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/chain/definitions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/chain/definitions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/chain/definitions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/chain/definitions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/chain/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/chain/index.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/chain/types.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/chain/types.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/definitions.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/definitions.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/definitions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/definitions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/definitions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/definitions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/events/definitions.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/events/definitions.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/events/definitions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/events/definitions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/events/definitions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/events/definitions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/events/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/events/index.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/events/types.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/events/types.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/identity/definitions.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/identity/definitions.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/identity/definitions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/identity/definitions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/identity/definitions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/identity/definitions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/identity/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/identity/index.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/identity/types.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/identity/types.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/index.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/lookup.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/lookup.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/registry.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/registry.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/transactions/definitions.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/transactions/definitions.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/transactions/definitions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/transactions/definitions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/transactions/definitions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/transactions/definitions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/transactions/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/transactions/index.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/transactions/types.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/transactions/types.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/types-lookup.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/types-lookup.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/verifier/definitions.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/verifier/definitions.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/verifier/definitions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/verifier/definitions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/verifier/definitions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/verifier/definitions.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/verifier/index.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/verifier/index.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/verifier/types.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces/verifier/types.d.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/new_user.js" beforeDir="false" afterPath="$PROJECT_DIR$/tests/new_user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/update.js" beforeDir="false" afterPath="$PROJECT_DIR$/tests/update.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/tests/utils.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -118,7 +73,7 @@
       <workItem from="1684225597360" duration="41388000" />
       <workItem from="1684338360212" duration="582000" />
       <workItem from="1684419835331" duration="5000" />
-      <workItem from="1684419849444" duration="10189000" />
+      <workItem from="1684419849444" duration="15595000" />
     </task>
     <servers />
   </component>

@@ -9,6 +9,8 @@ export const BYPASS_TOKEN = "dummy";
 export const KCoin = 1000000;
 // Character trait id for mindful trait
 export const MINDFUL = 33;
+// Character trait id for referral trait
+export const REFERRAL = 41;
 
 // Initialize connection to node and decorate custom types & RPC
 export async function init() {
@@ -41,6 +43,10 @@ export function delay(milliseconds) {
   return new Promise((resolve) => {
     setTimeout(resolve, milliseconds);
   });
+}
+
+export function almostEqual(a, b, delta = 0.01) {
+  return a.sub(b).abs().lt(delta);
 }
 
 /**
