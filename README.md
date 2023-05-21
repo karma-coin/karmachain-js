@@ -22,9 +22,7 @@ https://polkadot.js.org/docs/api/examples/promise/typegen/
 ## Test
 
 Firstly need to run local Karmachain node in verifier node. More information about node configuration
-can be found in tests documentation.
-
-To setup verifier keys:
+can be found in tests documentation. Tests automatically add verifier key using next command:s
 
 ```bash
 curl --location 'http://localhost:9933/' \

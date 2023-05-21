@@ -18,7 +18,8 @@
     "generate:meta": "ts-node-esm node_modules/.bin/polkadot-types-from-chain --package karmachain-js/interfaces --endpoint ./karmachain.json --output ./src/interfaces --strict",
     "build": "tsc -b --verbose",
     "lint": "eslint . --ext .js,.ts",
-    "test": "ava --serial"
+    "test": "npm run setup:verifier && ava --serial",
+    "setup:verifier": "curl --location 'http://localhost:9933/' --header 'Content-Type: application/json' --data '{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"author_insertKey\",\"params\":{\"key_type\":\"Veri\",\"suri\":\"//Alice\",\"public\":\"0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d\"}}'"
   },
   "dependencies": {
     "@polkadot/api": "^10.7.1",
