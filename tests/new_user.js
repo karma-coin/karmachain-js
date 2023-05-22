@@ -234,20 +234,33 @@ test("Appreciation of an existing user.", async (t) => {
 });
 
 test("Payment transaction (w/o an appreciation) between a user and non-user. The receiver signs up and gets the coin sent to it in the transaction.", async (t) => {
+  const firstUserRegistration = call_new_user(
+    t.context.api,
+    t.context.users[0].pair,
+    t.context.users[0].username,
+    t.context.users[0].phoneNumber
+  );
+  // For fee cover
+  const aliceTransfer = t.context.api.tx.balances
+    .transfer(t.context.users[0].pair.address, 1000 * KCoin)
+    .signAndSend(t.context.alice);
+
+  await Promise.all([firstUserRegistration, aliceTransfer]);
+
   await t.context.api.tx.appreciation
     .appreciation(
-      { AccountId: t.context.users[0].pair.address },
+      { AccountId: t.context.users[1].pair.address },
       KCoin,
       null,
       null
     )
-    .signAndSend(t.context.alice);
+    .signAndSend(t.context.users[0].pair);
 
   // Wait one block while transaction processed
   await delay(60000);
 
   const info = await t.context.api.rpc.identity.getUserInfoByAccount.raw(
-    t.context.users[0].pair.address
+    t.context.users[1].pair.address
   );
   // No user information should be provided, because user not registered on chain
   t.assert(info === null);
@@ -255,22 +268,22 @@ test("Payment transaction (w/o an appreciation) between a user and non-user. The
   // Call `new_user` tx to register user
   await call_new_user(
     t.context.api,
-    t.context.users[0].pair,
-    t.context.users[0].username,
-    t.context.users[0].phoneNumber
+    t.context.users[1].pair,
+    t.context.users[1].username,
+    t.context.users[1].phoneNumber
   );
 
   // Get information about user by `AccountId`
   const infoAfterRegistration =
     await t.context.api.rpc.identity.getUserInfoByAccount.raw(
-      t.context.users[0].pair.address
+      t.context.users[1].pair.address
     );
   t.assert(
-    infoAfterRegistration.account_id === t.context.users[0].pair.address
+    infoAfterRegistration.account_id === t.context.users[1].pair.address
   );
-  t.assert(infoAfterRegistration.user_name === t.context.users[0].username);
+  t.assert(infoAfterRegistration.user_name === t.context.users[1].username);
   t.assert(
-    infoAfterRegistration.mobile_number === t.context.users[0].phoneNumber
+    infoAfterRegistration.mobile_number === t.context.users[1].phoneNumber
   );
   // Coins send with appreciation + signup reward
   t.assert(infoAfterRegistration.balance === KCoin + 10 * KCoin);
