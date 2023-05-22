@@ -11,6 +11,8 @@ export const KCoin = 1000000;
 export const MINDFUL = 33;
 // Character trait id for referral trait
 export const REFERRAL = 41;
+export const NO_COMMUNITY_ID = 0;
+export const NO_CHAR_TRAIT_ID = 0;
 
 // Initialize connection to node and decorate custom types & RPC
 export async function init() {
@@ -43,10 +45,6 @@ export function delay(milliseconds) {
   return new Promise((resolve) => {
     setTimeout(resolve, milliseconds);
   });
-}
-
-export function almostEqual(a, b, delta = 0.01) {
-  return a.sub(b).abs().lt(delta);
 }
 
 /**
@@ -105,4 +103,49 @@ export async function call_new_user(api, pair, username, phoneNumber) {
 
   // Wait one block while transaction processed
   await delay(60000);
+}
+
+export async function subscribeAccountEvents(api, accountId, callback) {
+  return api.rpc.chain.subscribeFinalizedHeads(async (header) => {
+    const blockHash = await api.rpc.chain.getBlockHash(header.number);
+    const signedBlock = await api.rpc.chain.getBlock(blockHash);
+
+    signedBlock.block.extrinsics.forEach(async (extrinsic, index) => {
+      const allRecords = await api.query.system.events.at(blockHash);
+      // Filter only complete transactions events
+      const events = allRecords.filter(
+        ({ phase }) =>
+          phase.isApplyExtrinsic && phase.asApplyExtrinsic.eq(index)
+      );
+
+      // Check if events belong to specific account
+      const belongToAccount = events.find((event) =>
+        isEventBelongToAccount(event, accountId)
+      );
+
+      if (belongToAccount) {
+        callback(extrinsic, events);
+      }
+    });
+  });
+}
+
+/**
+ * Determine does event belong to specific account
+ * @param event
+ * @param accountId
+ * @returns {boolean}
+ */
+function isEventBelongToAccount(event, accountId) {
+  let flag = false;
+  const types = event.event.typeDef;
+
+  // Loop through each of the parameters, displaying the type and data
+  event.event.data.forEach((data, index) => {
+    if (types[index].type === "AccountId32" && data.eq(accountId)) {
+      flag = true;
+    }
+  });
+
+  return flag;
 }
