@@ -4,49 +4,49 @@ export default {
   types: {
     VerificationResult: {
       _enum: [
-        'Unspecified',
-        'UserNameTaken',
-        'Verified',
-        'Unverified',
-        'MissingData',
-        'InvalidSignature',
-        'AccountMismatch'
-      ]
+        "Unspecified",
+        "UserNameTaken",
+        "Verified",
+        "Unverified",
+        "MissingData",
+        "InvalidSignature",
+        "AccountMismatch",
+      ],
     },
     VerificationResponse: {
-      verifier_account_id: 'AccountId',
-      verification_result: 'VerificationResult',
-      account_id: 'AccountId',
-      phone_number: 'Text',
-      username: 'Text',
-      signature: 'Bytes'
-    }
+      verifier_account_id: "AccountId",
+      verification_result: "VerificationResult",
+      account_id: "AccountId",
+      phone_number: "Text",
+      username: "Text",
+      signature: "Bytes",
+    },
   },
   rpc: {
     verifier: {
       verify: {
-        description: 'Verify signup params and return signed evidence',
+        description: "Verify signup params and return signed evidence",
         params: [
           {
-            name: 'account_id',
-            type: 'AccountId'
+            name: "account_id",
+            type: "AccountId",
           },
           {
-            name: 'username',
-            type: 'Text'
+            name: "username",
+            type: "Text",
           },
           {
-            name: 'phone_number',
-            type: 'Text'
+            name: "phone_number",
+            type: "Text",
           },
           {
-            name: 'bypass_token',
-            type: 'Text',
-            isOptional: true
-          }
+            name: "bypass_token",
+            type: "Text",
+            isOptional: true,
+          },
         ],
-        type: 'VerificationResponse'
-      }
+        type: "VerificationResponse",
+      },
     },
-  }
+  },
 };
