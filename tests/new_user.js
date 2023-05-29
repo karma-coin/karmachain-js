@@ -38,8 +38,8 @@ test.beforeEach(async (t) => {
   // Add Bob private keys
   t.context.bob = t.context.keyring.addFromUri("//Bob");
 
-  // Set tests timeout for 5 minutes
-  t.timeout(300000);
+  // Set tests timeout for 1 minutes
+  t.timeout(60000);
 });
 
 test("Signup", async (t) => {
@@ -111,7 +111,7 @@ test("Appreciation to a non-user, that person signs up and the appreciation is e
 
   await Promise.all([firstUserRegistration, aliceTransfer]);
   // Wait one block to check that transaction not included into the block
-  await delay(60000);
+  await delay(12000);
 
   await t.context.api.tx.appreciation
     .appreciation(
@@ -130,7 +130,7 @@ test("Appreciation to a non-user, that person signs up and the appreciation is e
     )
     .paymentInfo(t.context.users[0].pair);
   // Wait one block to check that transaction not included into the block
-  await delay(60000);
+  await delay(12000);
 
   const info = await t.context.api.rpc.identity.getUserInfoByAccount.raw(
     t.context.users[1].pair.address
@@ -216,7 +216,7 @@ test("Appreciation of an existing user.", async (t) => {
     .signAndSend(t.context.users[0].pair);
 
   // Wait one block while transaction processed
-  await delay(60000);
+  await delay(12000);
 
   // Get information about user by `AccountId`
   const info = await t.context.api.rpc.identity.getUserInfoByAccount.raw(
@@ -257,7 +257,7 @@ test("Payment transaction (w/o an appreciation) between a user and non-user. The
     .signAndSend(t.context.users[0].pair);
 
   // Wait one block while transaction processed
-  await delay(60000);
+  await delay(12000);
 
   const info = await t.context.api.rpc.identity.getUserInfoByAccount.raw(
     t.context.users[1].pair.address
