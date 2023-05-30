@@ -30,8 +30,8 @@ test.beforeEach(async (t) => {
   // Add Bob private keys
   t.context.bob = t.context.keyring.addFromUri("//Bob");
 
-  // Set tests timeout for 10 minutes
-  t.timeout(600000);
+  // Set tests timeout for 2 minutes
+  t.timeout(120000);
 });
 
 test("Events stream basic test", async (t) => {
@@ -116,7 +116,7 @@ test("Events stream basic test", async (t) => {
 
   // Wait one block while transaction processed and blocks finalization,
   // finalization is 2 blocks behind best block so wait for 2 blocks more
-  await delay(180000);
+  await delay(36000);
 
   unsubscribe();
 });
@@ -173,8 +173,8 @@ test("Insufficient funds tx", async (t) => {
       // We expect `account balance too low` error, so skip it
     });
 
-  // Wait one block while transaction processed and blocks finalization
-  await delay(240000);
+  // Wait until blocks finalization
+  await delay(48000);
 
   unsubscribe();
 });

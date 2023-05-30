@@ -102,7 +102,7 @@ export async function call_new_user(api, pair, username, phoneNumber) {
     .signAndSend(pair);
 
   // Wait one block while transaction processed
-  await delay(60000);
+  await delay(12000);
 }
 
 export async function subscribeAccountEvents(api, accountId, callback) {
