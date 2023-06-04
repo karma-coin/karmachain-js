@@ -1,5 +1,5 @@
 // Required imports
-import { ApiPromise, WsProvider } from "@polkadot/api";
+import { ApiPromise, Keyring, WsProvider } from "@polkadot/api";
 import * as definitions from "../src/interfaces/definitions.js";
 import { decodeAddress } from "@polkadot/util-crypto";
 import { mnemonicGenerate } from "@polkadot/util-crypto";
@@ -39,6 +39,27 @@ export async function init() {
       ...rpc,
     },
   });
+}
+
+export async function defaultSetup(t) {
+  // Setup connection to node
+  t.context.api = await init();
+  // Setup crypto key manager
+  t.context.keyring = new Keyring({ type: "sr25519" });
+
+  // Setup some user accounts
+  t.context.users = [];
+  for (let i = 0; i < 10; i++) {
+    t.context.users[i] = generateUser(t.context.keyring);
+  }
+
+  // Add Alice private keys
+  t.context.alice = t.context.keyring.addFromUri("//Alice");
+  // Add Bob private keys
+  t.context.bob = t.context.keyring.addFromUri("//Bob");
+
+  // Set tests timeout for 2 minutes
+  t.timeout(120000);
 }
 
 export function delay(milliseconds) {

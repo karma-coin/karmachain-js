@@ -1,38 +1,27 @@
+/**
+ * This tests assumes:
+ *  * node setup and available by address `ws://127.0.0.1:9944`,
+ *  * node run in verifier mode
+ *  * node run with enabled offchain worker
+ *  * Alice account is a phone verifier
+ *  * Bypass token equal `dummy`
+ *  * Alice have balance enough to cover balance transfer 3 KC + transactions fees
+ */
+
 import anyTest from "ava";
 import {
   call_new_user,
+  defaultSetup,
   delay,
-  generateUser,
-  init,
   KCoin,
   NO_CHAR_TRAIT_ID,
   NO_COMMUNITY_ID,
   subscribeAccountEvents,
 } from "./utils.js";
-import { Keyring } from "@polkadot/api";
 
 const test = anyTest;
 
-test.beforeEach(async (t) => {
-  // Setup connection to node
-  t.context.api = await init();
-  // Setup crypto key manager
-  t.context.keyring = new Keyring({ type: "sr25519" });
-
-  // Setup some user accounts
-  t.context.users = [];
-  for (let i = 0; i < 10; i++) {
-    t.context.users[i] = generateUser(t.context.keyring);
-  }
-
-  // Add Alice private keys
-  t.context.alice = t.context.keyring.addFromUri("//Alice");
-  // Add Bob private keys
-  t.context.bob = t.context.keyring.addFromUri("//Bob");
-
-  // Set tests timeout for 2 minutes
-  t.timeout(120000);
-});
+test.beforeEach(async (t) => await defaultSetup(t));
 
 test("Events stream basic test", async (t) => {
   const firstUserRegistration = call_new_user(
