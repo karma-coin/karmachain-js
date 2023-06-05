@@ -11,9 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a094fba0-03f4-4057-b6c8-c8de3869dbef" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/events.js" beforeDir="false" afterPath="$PROJECT_DIR$/tests/events.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/new_user.js" beforeDir="false" afterPath="$PROJECT_DIR$/tests/new_user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/tests/utils.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/rewards.js" beforeDir="false" afterPath="$PROJECT_DIR$/tests/rewards.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +45,7 @@
     "WebServerToolWindowFactoryState": "false",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "karma-rewards",
     "javascript.nodejs.core.library.configured.version": "19.7.0",
     "javascript.nodejs.core.library.typings.version": "20.1.4",
     "last_opened_file_path": "/Users/danilkyrieiev/Documents/inc4/karmacoin/karmachain-js",

@@ -1,1 +1,1 @@
-export type PHANTOM_EVENTS = "events";
+export type PHANTOM_EVENTS = 'events';

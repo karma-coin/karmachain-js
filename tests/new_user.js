@@ -8,39 +8,18 @@
  */
 
 import {
-  init,
   delay,
   call_new_user,
   MINDFUL,
   KCoin,
-  generateUser,
   REFERRAL,
+  defaultSetup,
 } from "./utils.js";
 import anyTest from "ava";
-import { Keyring } from "@polkadot/api";
 
 const test = anyTest;
 
-test.beforeEach(async (t) => {
-  // Setup connection to node
-  t.context.api = await init();
-  // Setup crypto key manager
-  t.context.keyring = new Keyring({ type: "sr25519" });
-
-  // Setup some user accounts
-  t.context.users = [];
-  for (let i = 0; i < 10; i++) {
-    t.context.users[i] = generateUser(t.context.keyring);
-  }
-
-  // Add Alice private keys
-  t.context.alice = t.context.keyring.addFromUri("//Alice");
-  // Add Bob private keys
-  t.context.bob = t.context.keyring.addFromUri("//Bob");
-
-  // Set tests timeout for 1 minutes
-  t.timeout(60000);
-});
+test.beforeEach(async (t) => await defaultSetup(t));
 
 test("Signup", async (t) => {
   // Call `new_user` tx to register user
