@@ -36,16 +36,8 @@ test("Events stream basic test", async (t) => {
     t.context.users[1].username,
     t.context.users[1].phoneNumber
   );
-  // For fee cover
-  const aliceTransfer = t.context.api.tx.balances
-    .transfer(t.context.users[0].pair.address, 1000 * KCoin)
-    .signAndSend(t.context.alice);
 
-  await Promise.all([
-    firstUserRegistration,
-    secondUserRegistration,
-    aliceTransfer,
-  ]);
+  await Promise.all([firstUserRegistration, secondUserRegistration]);
 
   const unsubscribe = await subscribeAccountEvents(
     t.context.api,
@@ -123,16 +115,8 @@ test("Insufficient funds tx", async (t) => {
     t.context.users[1].username,
     t.context.users[1].phoneNumber
   );
-  // For fee cover
-  const aliceTransfer = t.context.api.tx.balances
-    .transfer(t.context.users[0].pair.address, 1000 * KCoin)
-    .signAndSend(t.context.alice);
 
-  await Promise.all([
-    firstUserRegistration,
-    secondUserRegistration,
-    aliceTransfer,
-  ]);
+  await Promise.all([firstUserRegistration, secondUserRegistration]);
 
   const unsubscribe = await subscribeAccountEvents(
     t.context.api,
