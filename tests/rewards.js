@@ -1,8 +1,8 @@
 import {
   call_new_user,
   defaultSetup,
-  delay,
-  subscribeAccountEvents,
+  delay, KCoin,
+  subscribeAccountEvents
 } from "./utils.js";
 import anyTest from "ava";
 
@@ -34,6 +34,13 @@ test("Karma rewards work fine", async (t) => {
 
   // Wait at least for 5 blocks in devnet
   await delay(60000);
+
+  const info = await t.context.api.rpc.identity.getUserInfoByAccount.raw(
+    t.context.users[0].pair.address
+  );
+
+  // signup reward + karma rewards
+  t.assert(info.balance === 10 * KCoin + 10 * KCoin);
 
   unsubscribe();
 });
