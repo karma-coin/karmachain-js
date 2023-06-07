@@ -15,6 +15,7 @@ import {
   REFERRAL,
   defaultSetup,
   assertBalance,
+  REFERRAL_REWARD,
 } from "./utils.js";
 import anyTest from "ava";
 
@@ -78,18 +79,13 @@ test("Signup when already signed up on a different device", async (t) => {
 });
 
 test("Appreciation to a non-user, that person signs up and the appreciation is executed post signup and referral gets the referral reward.", async (t) => {
-  const firstUserRegistration = call_new_user(
+  await call_new_user(
     t.context.api,
     t.context.users[0].pair,
     t.context.users[0].username,
     t.context.users[0].phoneNumber
   );
-  // For fee cover
-  const aliceTransfer = t.context.api.tx.balances
-    .transfer(t.context.users[0].pair.address, 1000 * KCoin)
-    .signAndSend(t.context.alice);
 
-  await Promise.all([firstUserRegistration, aliceTransfer]);
   // Wait one block to check that transaction not included into the block
   await delay(12000);
 
@@ -101,14 +97,6 @@ test("Appreciation to a non-user, that person signs up and the appreciation is e
       MINDFUL
     )
     .signAndSend(t.context.users[0].pair);
-  const paymentInfo = await t.context.api.tx.appreciation
-    .appreciation(
-      { AccountId: t.context.users[1].pair.address },
-      KCoin,
-      null,
-      MINDFUL
-    )
-    .paymentInfo(t.context.users[0].pair);
   // Wait one block to check that transaction not included into the block
   await delay(12000);
 
@@ -133,12 +121,8 @@ test("Appreciation to a non-user, that person signs up and the appreciation is e
   t.assert(senderInfo.account_id === t.context.users[0].pair.address);
   t.assert(senderInfo.user_name === t.context.users[0].username);
   t.assert(senderInfo.mobile_number === t.context.users[0].phoneNumber);
-  // signup reward + transfer from Alice - coins send with appreciation - fee
   t.assert(
-    assertBalance(
-      senderInfo.balance,
-      10 * KCoin + 1000 * KCoin - KCoin - paymentInfo.partialFee
-    )
+    assertBalance(senderInfo.balance, 10 * KCoin - KCoin + REFERRAL_REWARD)
   );
   t.assert(
     senderInfo.trait_scores.find(
@@ -176,16 +160,8 @@ test("Appreciation of an existing user.", async (t) => {
     t.context.users[1].username,
     t.context.users[1].phoneNumber
   );
-  // For fee cover
-  const aliceTransfer = t.context.api.tx.balances
-    .transfer(t.context.users[0].pair.address, 1000 * KCoin)
-    .signAndSend(t.context.alice);
 
-  await Promise.all([
-    firstUserRegistration,
-    secondUserRegistration,
-    aliceTransfer,
-  ]);
+  await Promise.all([firstUserRegistration, secondUserRegistration]);
 
   await t.context.api.tx.appreciation
     .appreciation(
@@ -215,18 +191,12 @@ test("Appreciation of an existing user.", async (t) => {
 });
 
 test("Payment transaction (w/o an appreciation) between a user and non-user. The receiver signs up and gets the coin sent to it in the transaction.", async (t) => {
-  const firstUserRegistration = call_new_user(
+  await call_new_user(
     t.context.api,
     t.context.users[0].pair,
     t.context.users[0].username,
     t.context.users[0].phoneNumber
   );
-  // For fee cover
-  const aliceTransfer = t.context.api.tx.balances
-    .transfer(t.context.users[0].pair.address, 1000 * KCoin)
-    .signAndSend(t.context.alice);
-
-  await Promise.all([firstUserRegistration, aliceTransfer]);
 
   await t.context.api.tx.appreciation
     .appreciation(

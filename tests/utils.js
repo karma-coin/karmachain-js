@@ -9,6 +9,7 @@ export const BYPASS_TOKEN = "dummy";
 export const KCoin = 1000000;
 // Amount of karma reward
 export const KARMA_REWARD = 10 * KCoin;
+export const REFERRAL_REWARD = 10 * KCoin;
 // Character trait id for mindful trait
 export const MINDFUL = 33;
 // Character trait id for referral trait
