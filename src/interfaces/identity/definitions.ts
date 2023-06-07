@@ -110,6 +110,7 @@ export default {
           {
             name: "community_id",
             type: "u32",
+            isOptional: true,
           },
           {
             name: "at",
