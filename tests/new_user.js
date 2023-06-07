@@ -14,6 +14,7 @@ import {
   KCoin,
   REFERRAL,
   defaultSetup,
+  assertBalance,
 } from "./utils.js";
 import anyTest from "ava";
 
@@ -134,15 +135,16 @@ test("Appreciation to a non-user, that person signs up and the appreciation is e
   t.assert(senderInfo.mobile_number === t.context.users[0].phoneNumber);
   // signup reward + transfer from Alice - coins send with appreciation - fee
   t.assert(
-    senderInfo.balance ===
+    assertBalance(
+      senderInfo.balance,
       10 * KCoin + 1000 * KCoin - KCoin - paymentInfo.partialFee
+    )
   );
-  // TODO: should uncommented when referral feature will be implemented
-  // t.assert(
-  //   senderInfo.trait_scores.find(
-  //     (traitScore) => traitScore.trait_id === REFERRAL
-  //   ) != null
-  // );
+  t.assert(
+    senderInfo.trait_scores.find(
+      (traitScore) => traitScore.trait_id === REFERRAL
+    ) != null
+  );
 
   // Get information about receiver of appreciation
   const receiverInfo =
@@ -153,7 +155,7 @@ test("Appreciation to a non-user, that person signs up and the appreciation is e
   t.assert(receiverInfo.user_name === t.context.users[1].username);
   t.assert(receiverInfo.mobile_number === t.context.users[1].phoneNumber);
   // Coins send with appreciation + signup reward
-  t.assert(receiverInfo.balance === KCoin + 10 * KCoin);
+  t.assert(assertBalance(receiverInfo.balance, KCoin + 10 * KCoin));
   t.assert(
     receiverInfo.trait_scores.find(
       (traitScore) => traitScore.trait_id === MINDFUL
@@ -205,7 +207,7 @@ test("Appreciation of an existing user.", async (t) => {
   t.assert(info.user_name === t.context.users[1].username);
   t.assert(info.mobile_number === t.context.users[1].phoneNumber);
   // Coins send with appreciation + signup reward
-  t.assert(info.balance === KCoin + 10 * KCoin);
+  t.assert(assertBalance(info.balance, KCoin + 10 * KCoin));
   t.assert(
     info.trait_scores.find((traitScore) => traitScore.trait_id === MINDFUL) !=
       null
@@ -265,5 +267,5 @@ test("Payment transaction (w/o an appreciation) between a user and non-user. The
     infoAfterRegistration.mobile_number === t.context.users[1].phoneNumber
   );
   // Coins send with appreciation + signup reward
-  t.assert(infoAfterRegistration.balance === KCoin + 10 * KCoin);
+  t.assert(assertBalance(infoAfterRegistration.balance, KCoin + 10 * KCoin));
 });
