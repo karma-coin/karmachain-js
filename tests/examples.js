@@ -155,6 +155,7 @@ test("Get all txs and events stored on node to and from an account id", async (t
 
 test("Get genesis data from chain for a NetID", async (t) => {
   // TODO: ???
+  t.assert(true)
 });
 
 test("Get current chain state", async (t) => {

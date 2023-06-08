@@ -7,6 +7,9 @@ import { mnemonicGenerate } from "@polkadot/util-crypto";
 export const BYPASS_TOKEN = "dummy";
 // Amount of tokens equal to one KarmaCoin
 export const KCoin = 1000000;
+// Amount of karma reward
+export const KARMA_REWARD = 10 * KCoin;
+export const REFERRAL_REWARD = 10 * KCoin;
 // Character trait id for mindful trait
 export const MINDFUL = 33;
 // Character trait id for referral trait
@@ -66,6 +69,16 @@ export function delay(milliseconds) {
   return new Promise((resolve) => {
     setTimeout(resolve, milliseconds);
   });
+}
+
+export function assertBalance(actual, expected) {
+  const result = actual === expected || actual === expected + KARMA_REWARD;
+
+  if (!result) {
+    console.log(`Balance mismatch. Expected: ${expected} | Actual: ${actual}`);
+  }
+
+  return result;
 }
 
 /**
