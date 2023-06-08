@@ -1,10 +1,11 @@
 /**
- * This tests assumes:
- *  * node setup and available by address `ws://127.0.0.1:9944`,
- *  * node run in verifier mode
- *  * Alice account is a phone verifier
- *  * Bypass token equal `dummy`
- *  * Alice have balance enough to cover balance transfer 3 KC + transactions fees
+ * Test assumptions
+ *  - Node setup and available at address `ws://127.0.0.1:9944`,
+ *  - Node runs in verifier mode
+ *  - Node runs with an enabled offchain worker
+ *  - Alice's account is a phone verifier
+ *  - Bypass token equals `dummy`
+ *  - Alice has sufficient balance to cover balance transfer of 3 KC + transactions fees
  */
 
 import {

@@ -1,11 +1,11 @@
 /**
- * This tests assumes:
- *  * node setup and available by address `ws://127.0.0.1:9944`,
- *  * node run in verifier mode
- *  * node run with enabled offchain worker
- *  * Alice account is a phone verifier
- *  * Bypass token equal `dummy`
- *  * Alice have balance enough to cover balance transfer 3 KC + transactions fees
+ * Test assumptions
+ *  - Node setup and available at address `ws://127.0.0.1:9944`,
+ *  - Node runs in verifier mode
+ *  - Node runs with an enabled offchain worker
+ *  - Alice's account is a phone verifier
+ *  - Bypass token equals `dummy`
+ *  - Alice has sufficient balance to cover balance transfer of 3 KC + transactions fees
  */
 
 import anyTest from "ava";
@@ -85,7 +85,7 @@ test("Events stream basic test", async (t) => {
     }
   );
 
-  // Preform basic transfer
+  // Preform a basic transfer
   await t.context.api.tx.appreciation
     .appreciation(
       { AccountId: t.context.users[1].pair.address },
@@ -95,8 +95,8 @@ test("Events stream basic test", async (t) => {
     )
     .signAndSend(t.context.users[0].pair);
 
-  // Wait one block while transaction processed and blocks finalization,
-  // finalization is 2 blocks behind best block so wait for 2 blocks more
+  // Wait 1 block for transaction to process and blocks to finalize.
+  // Finalization is 2 blocks behind best block, so wait for 2 additioanl blocks 
   await delay(36000);
 
   unsubscribe();
@@ -133,7 +133,7 @@ test("Insufficient funds tx", async (t) => {
     }
   );
 
-  // Preform basic transfer without enough founds
+  // Preform basic transfer without suffient founds
   t.context.api.tx.appreciation
     .appreciation(
       { AccountId: t.context.users[1].pair.address },
@@ -146,7 +146,7 @@ test("Insufficient funds tx", async (t) => {
       // We expect `account balance too low` error, so skip it
     });
 
-  // Wait until blocks finalization
+  // Wait for blocks finalization
   await delay(48000);
 
   unsubscribe();
