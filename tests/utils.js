@@ -6,7 +6,7 @@ import { mnemonicGenerate } from "@polkadot/util-crypto";
 
 export const BYPASS_TOKEN = "dummy";
 // Amount of tokens equal to one KarmaCoin
-export const KCoin = 1000000;
+export const KCoin = 1000000000000;
 // Amount of karma reward
 export const KARMA_REWARD = 10 * KCoin;
 export const REFERRAL_REWARD = 10 * KCoin;
@@ -125,10 +125,11 @@ export async function call_new_user(api, pair, username, phoneNumber) {
   // Sign and send `newUser` transaction
   await api.tx.identity
     .newUser(
+      // TODO: Uncomment this when verifing evidence will be enabled
       // Converting `AccountId` to `PublicKey`
-      decodeAddress(evidence.verifier_account_id),
+      // decodeAddress(evidence.verifier_account_id),
       // Have to add `0x` prefix for correct encode signature
-      "0x" + evidence.signature,
+      // "0x" + evidence.signature,
       evidence.account_id,
       evidence.username,
       evidence.phone_number
