@@ -97,7 +97,8 @@ test("Events stream basic test", async (t) => {
 
   // Wait 1 block for transaction to process and blocks to finalize.
   // Finalization is 2 blocks behind best block, so wait for 2 additioanl blocks 
-  await delay(36000);
+  // Waiting for one block to be suee that block finalized
+  await delay(48000);
 
   unsubscribe();
 });
