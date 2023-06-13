@@ -140,6 +140,24 @@ export async function call_new_user(api, pair, username, phoneNumber) {
   await delay(12000);
 }
 
+export async function subscribeEvents(api, callback) {
+  return api.rpc.chain.subscribeFinalizedHeads(async (header) => {
+    const blockHash = await api.rpc.chain.getBlockHash(header.number);
+    const signedBlock = await api.rpc.chain.getBlock(blockHash);
+
+    signedBlock.block.extrinsics.forEach(async (extrinsic, index) => {
+      const allRecords = await api.query.system.events.at(blockHash);
+      // Filter only complete transactions events
+      const events = allRecords.filter(
+        ({ phase }) =>
+          phase.isApplyExtrinsic && phase.asApplyExtrinsic.eq(index)
+      );
+      
+      callback(extrinsic, events)
+    })
+  });
+}
+
 export async function subscribeAccountEvents(api, accountId, callback) {
   return api.rpc.chain.subscribeFinalizedHeads(async (header) => {
     const blockHash = await api.rpc.chain.getBlockHash(header.number);
