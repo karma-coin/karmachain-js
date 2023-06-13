@@ -1,5 +1,5 @@
 import anyTest from "ava";
-import { call_new_user, defaultSetup, delay, KCoin, MINDFUL } from "./utils.js";
+import { call_new_user, subscribeEvents, defaultSetup, delay, KCoin, MINDFUL } from "./utils.js";
 
 const test = anyTest;
 
@@ -198,3 +198,53 @@ test("Get a list of users with pagination with optional alphanumeric prefix filt
   const tomaContacts = await t.context.api.rpc.community.getContacts("Toma");
   t.assert(tomaContacts.length === 1);
 });
+
+test("Subscribe on finalized blocks", async(t) => {
+  let newUserCounter = 0;
+  let appreciationCounter = 0;
+
+  const unsubscribe = await subscribeEvents(t.context.api, (extrinsic, events) => {
+    if (t.context.api.tx.identity.newUser.is(extrinsic)) {
+      newUserCounter += 1;
+    }
+
+    if (t.context.api.tx.appreciation.appreciation.is(extrinsic)) {
+      appreciationCounter += 1;
+    }
+  });
+
+  const firstUserRegistration = call_new_user(
+    t.context.api,
+    t.context.users[0].pair,
+    t.context.users[0].username,
+    t.context.users[0].phoneNumber
+  );
+  const secondUserRegistration = call_new_user(
+    t.context.api,
+    t.context.users[1].pair,
+    t.context.users[1].username,
+    t.context.users[1].phoneNumber
+  );
+
+  await Promise.all([firstUserRegistration, secondUserRegistration]);
+
+  // Preform a basic transfer
+  await t.context.api.tx.appreciation
+    .appreciation(
+      { AccountId: t.context.users[1].pair.address },
+      KCoin,
+      null,
+      null
+    )
+    .signAndSend(t.context.users[0].pair);
+
+  // Wait 1 block for transaction to process and blocks to finalize.
+  // Finalization is 2 blocks behind best block, so wait for 2 additioanl blocks 
+  // Waiting for one block to be suee that block finalized
+  await delay(48000);
+
+  t.assert(newUserCounter == 2);
+  t.assert(appreciationCounter == 1);
+
+  unsubscribe();
+})
