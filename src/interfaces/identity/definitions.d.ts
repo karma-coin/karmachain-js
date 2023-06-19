@@ -36,7 +36,7 @@ declare const _default: {
     };
     rpc: {
         identity: {
-            getUserInfoByAccount: {
+            getUserInfoByAccountId: {
                 description: string;
                 params: ({
                     name: string;
@@ -49,7 +49,7 @@ declare const _default: {
                 })[];
                 type: string;
             };
-            getUserInfoByName: {
+            getUserInfoByUsername: {
                 description: string;
                 params: ({
                     name: string;
@@ -62,7 +62,20 @@ declare const _default: {
                 })[];
                 type: string;
             };
-            getUserInfoByNumber: {
+            getUserInfoByPhoneNumber: {
+                description: string;
+                params: ({
+                    name: string;
+                    type: string;
+                    isOptional?: undefined;
+                } | {
+                    name: string;
+                    type: string;
+                    isOptional: boolean;
+                })[];
+                type: string;
+            };
+            getUserInfoByPhoneNumberHash: {
                 description: string;
                 params: ({
                     name: string;

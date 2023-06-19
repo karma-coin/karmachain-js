@@ -14,26 +14,26 @@ test("Get account info", async (t) => {
   );
 
   const infoByAccountId =
-    await t.context.api.rpc.identity.getUserInfoByAccount.raw(
+    await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
       t.context.users[0].pair.address
     );
 
   const infoByPhoneNumber =
-    await t.context.api.rpc.identity.getUserInfoByNumber.raw(
+    await t.context.api.rpc.identity.getUserInfoByPhoneNumber.raw(
       t.context.users[0].phoneNumber
     );
 
-  t.assert(infoByAccountId.account_id === t.context.users[0].pair.address);
-  t.assert(infoByAccountId.nonce === 1);
-  t.assert(infoByAccountId.user_name === t.context.users[0].username);
-  t.assert(infoByAccountId.mobile_number === t.context.users[0].phoneNumber);
-  t.assert(infoByAccountId.balance === 10 * KCoin);
-  t.assert(infoByAccountId.trait_scores.length === 1);
-  t.assert(infoByAccountId.trait_scores[0].trait_id === 1);
-  t.assert(infoByAccountId.trait_scores[0].karma_score === 1);
-  t.assert(infoByAccountId.trait_scores[0].community_id === 0);
-  t.assert(infoByAccountId.karma_score === 1);
-  t.assert(infoByAccountId.community_membership.length === 0);
+  t.is(infoByAccountId.account_id, t.context.users[0].pair.address);
+  t.is(infoByAccountId.nonce, 1);
+  t.is(infoByAccountId.user_name, t.context.users[0].username);
+  t.is(infoByAccountId.phone_number_hash, t.context.users[0].phoneNumberHash);
+  t.is(infoByAccountId.balance, 10 * KCoin);
+  t.is(infoByAccountId.trait_scores.length, 1);
+  t.is(infoByAccountId.trait_scores[0].trait_id, 1);
+  t.is(infoByAccountId.trait_scores[0].karma_score, 1);
+  t.is(infoByAccountId.trait_scores[0].community_id, 0);
+  t.is(infoByAccountId.karma_score, 1);
+  t.is(infoByAccountId.community_membership.length, 0);
   t.assert(
     JSON.stringify(infoByAccountId) === JSON.stringify(infoByPhoneNumber)
   );
@@ -153,11 +153,6 @@ test("Get all txs and events stored on node to and from an account id", async (t
   );
 });
 
-test("Get genesis data from chain for a NetID", async (t) => {
-  // TODO: ???
-  t.assert(true)
-});
-
 test("Get current chain state", async (t) => {
   const header = await t.context.api.rpc.chain.getHeader();
   t.assert(header.number.toNumber());
@@ -190,18 +185,20 @@ test("Get a list of users with pagination with optional alphanumeric prefix filt
   ]);
 
   const tomContacts = await t.context.api.rpc.community.getContacts("Tom");
-  t.assert(tomContacts.length === 2);
+  t.is(tomContacts.length, 2);
 
   const toContacts = await t.context.api.rpc.community.getContacts("To");
-  t.assert(toContacts.length === 3);
+  t.is(toContacts.length, 3);
 
   const tomaContacts = await t.context.api.rpc.community.getContacts("Toma");
-  t.assert(tomaContacts.length === 1);
+  t.is(tomaContacts.length, 1);
 });
 
 test("Subscribe on finalized blocks", async(t) => {
   let newUserCounter = 0;
   let appreciationCounter = 0;
+
+   await delay(48000);
 
   const unsubscribe = await subscribeEvents(t.context.api, (extrinsic, events) => {
     if (t.context.api.tx.identity.newUser.is(extrinsic)) {
@@ -243,8 +240,8 @@ test("Subscribe on finalized blocks", async(t) => {
   // Waiting for one block to be suee that block finalized
   await delay(48000);
 
-  t.assert(newUserCounter == 2);
-  t.assert(appreciationCounter == 1);
+  t.is(newUserCounter, 2);
+  t.is(appreciationCounter, 1);
 
   unsubscribe();
 })
