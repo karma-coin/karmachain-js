@@ -34,13 +34,13 @@ test("Signup", async (t) => {
   );
 
   // Get information about user by `AccountId`
-  const info = await t.context.api.rpc.identity.getUserInfoByAccount.raw(
+  const info = await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
     t.context.users[0].pair.address
   );
 
-  t.assert(info.account_id === t.context.users[0].pair.address);
-  t.assert(info.user_name === t.context.users[0].username);
-  t.assert(info.mobile_number === t.context.users[0].phoneNumber);
+  t.is(info.account_id, t.context.users[0].pair.address);
+  t.is(info.user_name, t.context.users[0].username);
+  t.is(info.phone_number_hash, t.context.users[0].phoneNumberHash);
 });
 
 test("Signup when already signed up on a different device", async (t) => {
@@ -53,13 +53,13 @@ test("Signup when already signed up on a different device", async (t) => {
   );
 
   // Get information about user by `AccountId`
-  const info = await t.context.api.rpc.identity.getUserInfoByAccount.raw(
+  const info = await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
     t.context.users[0].pair.address
   );
 
-  t.assert(info.account_id === t.context.users[0].pair.address);
-  t.assert(info.user_name === t.context.users[0].username);
-  t.assert(info.mobile_number === t.context.users[0].phoneNumber);
+  t.is(info.account_id, t.context.users[0].pair.address);
+  t.is(info.user_name, t.context.users[0].username);
+  t.is(info.phone_number_hash, t.context.users[0].phoneNumberHash);
 
   // Call `new_user` tx to register user with different keypair
   await call_new_user(
@@ -71,12 +71,12 @@ test("Signup when already signed up on a different device", async (t) => {
 
   // Get information about user by `AccountId`
   const infoAfterUpdate =
-    await t.context.api.rpc.identity.getUserInfoByAccount.raw(
+    await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
       t.context.users[1].pair.address
     );
-  t.assert(infoAfterUpdate.account_id === t.context.users[1].pair.address);
-  t.assert(infoAfterUpdate.user_name === t.context.users[0].username);
-  t.assert(infoAfterUpdate.mobile_number === t.context.users[0].phoneNumber);
+  t.is(infoAfterUpdate.account_id, t.context.users[1].pair.address);
+  t.is(infoAfterUpdate.user_name, t.context.users[0].username);
+  t.is(infoAfterUpdate.phone_number_hash, t.context.users[0].phoneNumberHash);
 });
 
 test("Appreciation to a non-user, that person signs up and the appreciation is executed post signup and referral gets the referral reward.", async (t) => {
@@ -101,11 +101,11 @@ test("Appreciation to a non-user, that person signs up and the appreciation is e
   // Wait one block to check that transaction not included into the block
   await delay(12000);
 
-  const info = await t.context.api.rpc.identity.getUserInfoByAccount.raw(
+  const info = await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
     t.context.users[1].pair.address
   );
   // No user information should be provided, because user not registered on chain
-  t.assert(info === null);
+  t.falsy(info);
 
   // Call `new_user` tx to register user
   await call_new_user(
@@ -116,35 +116,35 @@ test("Appreciation to a non-user, that person signs up and the appreciation is e
   );
 
   // Get information about sender of appreciation
-  const senderInfo = await t.context.api.rpc.identity.getUserInfoByAccount.raw(
+  const senderInfo = await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
     t.context.users[0].pair.address
   );
-  t.assert(senderInfo.account_id === t.context.users[0].pair.address);
-  t.assert(senderInfo.user_name === t.context.users[0].username);
-  t.assert(senderInfo.mobile_number === t.context.users[0].phoneNumber);
-  t.assert(
+  t.is(senderInfo.account_id, t.context.users[0].pair.address);
+  t.is(senderInfo.user_name, t.context.users[0].username);
+  t.is(senderInfo.phone_number_hash, t.context.users[0].phoneNumberHash);
+  t.truthy(
     assertBalance(senderInfo.balance, 10 * KCoin - KCoin + REFERRAL_REWARD)
   );
-  t.assert(
+  t.truthy(
     senderInfo.trait_scores.find(
       (traitScore) => traitScore.trait_id === REFERRAL
-    ) != null
+    )
   );
 
   // Get information about receiver of appreciation
   const receiverInfo =
-    await t.context.api.rpc.identity.getUserInfoByAccount.raw(
+    await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
       t.context.users[1].pair.address
     );
-  t.assert(receiverInfo.account_id === t.context.users[1].pair.address);
-  t.assert(receiverInfo.user_name === t.context.users[1].username);
-  t.assert(receiverInfo.mobile_number === t.context.users[1].phoneNumber);
+  t.is(receiverInfo.account_id, t.context.users[1].pair.address);
+  t.is(receiverInfo.user_name, t.context.users[1].username);
+  t.is(receiverInfo.phone_number_hash, t.context.users[1].phoneNumberHash);
   // Coins send with appreciation + signup reward
-  t.assert(assertBalance(receiverInfo.balance, KCoin + 10 * KCoin));
-  t.assert(
+  t.truthy(assertBalance(receiverInfo.balance, KCoin + 10 * KCoin));
+  t.truthy(
     receiverInfo.trait_scores.find(
       (traitScore) => traitScore.trait_id === MINDFUL
-    ) != null
+    )
   );
 });
 
@@ -177,17 +177,16 @@ test("Appreciation of an existing user.", async (t) => {
   await delay(12000);
 
   // Get information about user by `AccountId`
-  const info = await t.context.api.rpc.identity.getUserInfoByAccount.raw(
+  const info = await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
     t.context.users[1].pair.address
   );
-  t.assert(info.account_id === t.context.users[1].pair.address);
-  t.assert(info.user_name === t.context.users[1].username);
-  t.assert(info.mobile_number === t.context.users[1].phoneNumber);
+  t.is(info.account_id, t.context.users[1].pair.address);
+  t.is(info.user_name, t.context.users[1].username);
+  t.is(info.phone_number_hash, t.context.users[1].phoneNumberHash);
   // Coins send with appreciation + signup reward
-  t.assert(assertBalance(info.balance, KCoin + 10 * KCoin));
-  t.assert(
-    info.trait_scores.find((traitScore) => traitScore.trait_id === MINDFUL) !=
-      null
+  t.truthy(assertBalance(info.balance, KCoin + 10 * KCoin));
+  t.truthy(
+    info.trait_scores.find((traitScore) => traitScore.trait_id === MINDFUL)
   );
 });
 
@@ -211,11 +210,11 @@ test("Payment transaction (w/o an appreciation) between a user and non-user. The
   // Wait one block while transaction processed
   await delay(12000);
 
-  const info = await t.context.api.rpc.identity.getUserInfoByAccount.raw(
+  const info = await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
     t.context.users[1].pair.address
   );
   // No user information should be provided, because user not registered on chain
-  t.assert(info === null);
+  t.falsy(info);
 
   // Call `new_user` tx to register user
   await call_new_user(
@@ -227,16 +226,16 @@ test("Payment transaction (w/o an appreciation) between a user and non-user. The
 
   // Get information about user by `AccountId`
   const infoAfterRegistration =
-    await t.context.api.rpc.identity.getUserInfoByAccount.raw(
+    await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
       t.context.users[1].pair.address
     );
-  t.assert(
-    infoAfterRegistration.account_id === t.context.users[1].pair.address
+  t.is(
+    infoAfterRegistration.account_id, t.context.users[1].pair.address
   );
-  t.assert(infoAfterRegistration.user_name === t.context.users[1].username);
-  t.assert(
-    infoAfterRegistration.mobile_number === t.context.users[1].phoneNumber
+  t.is(infoAfterRegistration.user_name, t.context.users[1].username);
+  t.is(
+    infoAfterRegistration.phone_number_hash, t.context.users[1].phoneNumberHash
   );
   // Coins send with appreciation + signup reward
-  t.assert(assertBalance(infoAfterRegistration.balance, KCoin + 10 * KCoin));
+  t.truthy(assertBalance(infoAfterRegistration.balance, KCoin + 10 * KCoin));
 });

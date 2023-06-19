@@ -35,7 +35,7 @@ test("Karma rewards work fine", async (t) => {
   // Wait at least for 5 blocks in devnet
   await delay(60000);
 
-  const info = await t.context.api.rpc.identity.getUserInfoByAccount.raw(
+  const info = await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
     t.context.users[0].pair.address
   );
 

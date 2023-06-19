@@ -2,11 +2,11 @@
 import { ApiPromise, Keyring, WsProvider } from "@polkadot/api";
 import * as definitions from "../src/interfaces/definitions.js";
 import { decodeAddress } from "@polkadot/util-crypto";
-import { mnemonicGenerate } from "@polkadot/util-crypto";
+import { mnemonicGenerate, blake2AsHex } from "@polkadot/util-crypto";
 
 export const BYPASS_TOKEN = "dummy";
 // Amount of tokens equal to one KarmaCoin
-export const KCoin = 1000000000000;
+export const KCoin = 1000000;
 // Amount of karma reward
 export const KARMA_REWARD = 10 * KCoin;
 export const REFERRAL_REWARD = 10 * KCoin;
@@ -104,13 +104,15 @@ export function generateUser(keyring) {
   const username = randomString(5);
   // Generating random phone number
   const phoneNumber = randomString(10, "01234567890");
+  // Hashing phone number
+  const phoneNumberHash = blake2AsHex(phoneNumber, 512);
   // Generating mnemonic and keys pair
   const mnemonic = mnemonicGenerate();
   const pair = keyring.addFromUri(mnemonic, {
     name: username,
   });
 
-  return { username, phoneNumber, pair };
+  return { username, phoneNumber, phoneNumberHash, pair };
 }
 
 export async function call_new_user(api, pair, username, phoneNumber) {
@@ -132,7 +134,7 @@ export async function call_new_user(api, pair, username, phoneNumber) {
       // "0x" + evidence.signature,
       evidence.account_id,
       evidence.username,
-      evidence.phone_number
+      evidence.phone_number_hash
     )
     .signAndSend(pair);
 

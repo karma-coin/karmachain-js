@@ -36,7 +36,7 @@ export default {
     },
     rpc: {
         identity: {
-            getUserInfoByAccount: {
+            getUserInfoByAccountId: {
                 description: "Provides information about user account by `AccountId`",
                 params: [
                     {
@@ -51,11 +51,11 @@ export default {
                 ],
                 type: "Option<UserInfo>",
             },
-            getUserInfoByName: {
+            getUserInfoByUsername: {
                 description: "Provides information about user account by `Username`",
                 params: [
                     {
-                        name: "name",
+                        name: "username",
                         type: "Text",
                     },
                     {
@@ -66,12 +66,27 @@ export default {
                 ],
                 type: "Option<UserInfo>",
             },
-            getUserInfoByNumber: {
+            getUserInfoByPhoneNumber: {
                 description: "Provides information about user account by `PhoneNumber`",
                 params: [
                     {
-                        name: "number",
+                        name: "phone_number",
                         type: "Text",
+                    },
+                    {
+                        name: "at",
+                        type: "BlockHash",
+                        isOptional: true,
+                    },
+                ],
+                type: "Option<UserInfo>",
+            },
+            getUserInfoByPhoneNumberHash: {
+                description: "Provides information about user account by `PhoneNumberHash`",
+                params: [
+                    {
+                        name: "phone_number_hash",
+                        type: "Hash",
                     },
                     {
                         name: "at",
