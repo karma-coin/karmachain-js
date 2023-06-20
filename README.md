@@ -19,10 +19,17 @@ yarn lint
 ## docs and tutorial
 https://polkadot.js.org/docs/api/examples/promise/typegen/
 
-## Test
+## Testing
 
-Firstly need to run local Karmachain node in verifier node and with enabled offchain worker. More information about node
-configuration can be found in tests documentation. Tests automatically add verifier key using next command:s
+1. Run a local Karmachain node in verifier mode and with an enabled offchain worker. 
+
+2. Run the tests
+
+```bash
+yarn test
+```
+
+Note that the tests config adds verifier and offchain keys using these commands so there's no need to manually run them.
 
 ```bash
 curl --location 'http://localhost:9933/' \
@@ -37,11 +44,6 @@ curl --location 'http://localhost:9933/' \
         "public": "0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d"
     }
 }'
-```
-
-Add offchain keys for karma rewards distribution:
-
-```bash
 curl --location 'http://localhost:9933/' \
 --header 'Content-Type: application/json' \
 --data '{
@@ -54,10 +56,4 @@ curl --location 'http://localhost:9933/' \
         "public": "0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d"
     }
 }'
-```
-
-To run tests:
-
-```bash
-yarn test
 ```
