@@ -2,7 +2,7 @@
   "name": "karmachain-js",
   "type": "module",
   "version": "0.0.1",
-  "description": "Karmachain api types",
+  "description": "Karmachain 2.0 api types",
   "repository": "https://github.com/karma-coin/karmachain-js",
   "author": "Avive <a@karmaco.in>",
   "license": "LicenseRef-LICENSE",
