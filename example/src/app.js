@@ -13,15 +13,18 @@ export function delay(milliseconds) {
     });
 }
 
+var context;
+
+
 async function example() {
 
-  const c = await karmachainapi.init(wsUrl);
+context = await karmachainapi.init(wsUrl);
 
   await karmachainapi.call_new_user(
-    c.api,
-    c.users[0].pair,
-    c.users[0].username,
-    c.users[0].phoneNumber
+    context.api,
+    context.users[0].pair,
+    context.users[0].username,
+    context.users[0].phoneNumber
   );
 
   console.log("Creating new user - waiting for transaction to be included in block...");
@@ -30,13 +33,13 @@ async function example() {
   await delay(120000);
 
   // Get information about user by `AccountId`
-  const info = await c.api.rpc.identity.getUserInfoByAccountId.raw(
-    c.users[0].pair.address
+  const info = await context.api.rpc.identity.getUserInfoByAccountId.raw(
+    context.users[0].pair.address
   );
 
   console.log("info: " + info);
 
-  console.log('Hello World!' + c.users[0].username + ", " + info.user_name + ", " + info.phone_number_hash);
+  console.log('Hello World!' + context.users[0].username + ", " + info.user_name + ", " + info.phone_number_hash);
 };
 
 example();

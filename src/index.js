@@ -41,10 +41,12 @@ export async function init(url) {
   context.api = await initApi(url);
   context.keyring = new Keyring({ type: "sr25519" });
 
-  // Setup some user accounts fpr testing
+  // Setup some user accounts for testing
   for (let i = 0; i < 10; i++) {
     context.users[i] = generateUser(context.keyring);
   }
+
+  // on testnents it is useful to have alice and bob preloaded
 
   // Add Alice private keys
   context.alice = context.keyring.addFromUri("//Alice");
