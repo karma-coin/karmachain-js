@@ -20,15 +20,19 @@ export const REFERRAL = 41;
 export const NO_COMMUNITY_ID = 0;
 export const NO_CHAR_TRAIT_ID = 0;
 
-app.get('/', async (req, res) => {
-  const api = await init();
-  const keyring = new Keyring({ type: "sr25519" });
-  const users = [];
-  for (let i = 0; i < 10; i++) {
-    users[i] = generateUser(keyring);
-  }
+const wsUrl = 'ws://127.0.0.1:9944';
 
-  res.send('Hello World!' + users[0].username);
+var context = {
+    api: null,
+    users: [],
+    keyring: null,
+    alice: null,
+    bob: null,
+}
+ 
+app.get('/', async (req, res) => {
+  const c = await init();
+  res.send('Hello World!' + c.users[0].username);
 })
 
 app.listen(port, () => {
@@ -36,9 +40,9 @@ app.listen(port, () => {
 })
 
 // Initialize connection to node and decorate custom types & RPC
-export async function init() {
+async function initApi(url) {
   // Initialise the provider to connect to the local node
-  const provider = new WsProvider("ws://127.0.0.1:9944");
+  const provider = new WsProvider(url);
 
   // Load custom types & rpc definitions for API
   const types = Object.values(definitions).reduce(
@@ -62,25 +66,24 @@ export async function init() {
   });
 }
 
-export async function defaultSetup(t) {
+export async function init() {
+
   // Setup connection to node
-  t.context.api = await init();
-  // Setup crypto key manager
-  t.context.keyring = new Keyring({ type: "sr25519" });
+  context.api = await initApi(wsUrl);
+
+  context.keyring = new Keyring({ type: "sr25519" });
 
   // Setup some user accounts
-  t.context.users = [];
   for (let i = 0; i < 10; i++) {
-    t.context.users[i] = generateUser(t.context.keyring);
+    context.users[i] = generateUser(context.keyring);
   }
 
   // Add Alice private keys
-  t.context.alice = t.context.keyring.addFromUri("//Alice");
+  context.alice = context.keyring.addFromUri("//Alice");
   // Add Bob private keys
-  t.context.bob = t.context.keyring.addFromUri("//Bob");
-
-  // Set tests timeout for 2 minutes
-  t.timeout(120000);
+  context.bob = context.keyring.addFromUri("//Bob");
+  
+  return context;
 }
 
 export function delay(milliseconds) {
