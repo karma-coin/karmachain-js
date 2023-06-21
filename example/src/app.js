@@ -11,8 +11,8 @@ const port = 3000;
 const wsUrl = 'ws://127.0.0.1:9944';
 
 app.get('/', async (req, res) => {
-  const c = await karmachainapi.initApi(wsUrl);
-  res.send('Hello World!' + c.users[0].username);
+  const context = await karmachainapi.init(wsUrl);
+  res.send('Hello World!' + context.users[0].username);
 })
 
 app.listen(port, () => {

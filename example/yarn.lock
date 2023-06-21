@@ -1679,10 +1679,8 @@ json-stringify-safe@^5.0.1:
   resolved "https://registry.yarnpkg.com/json-stringify-safe/-/json-stringify-safe-5.0.1.tgz#1296a2d58fd45f19a0f6ce01d65701e2c735b6eb"
   integrity sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==
 
-karmachain2-js@^0.0.1:
+"karmachain2-js@file:..":
   version "0.0.1"
-  resolved "https://registry.yarnpkg.com/karmachain2-js/-/karmachain2-js-0.0.1.tgz#2b155b43dcae5d8237076109391cf0f79957a5b9"
-  integrity sha512-F+ak/MONNjc5pOLU0K1DPGJzB4jD8IIxgi/8RW218iUBRSo6633WU1EDt0f4r363Sum+vfRUVM4ipYze6icXgQ==
   dependencies:
     "@polkadot/api" "^10.7.1"
     "@polkadot/util-crypto" "^12.2.1"

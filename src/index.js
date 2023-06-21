@@ -1,10 +1,10 @@
 // We need to import the augmented definitions "somewhere" in our project, however since we have
 // it in tsconfig as an override and the api/types has imports, it is not strictly required here.
 // Because of the tsconfig override, we could import from '@polkadot/{api, types}/augment'
-import "./interfaces/augment-api";
-import "./interfaces/augment-types";
+import "./interfaces/augment-api.js";
+import "./interfaces/augment-types.js";
 
-import * as definitions from "./interfaces/definitions.js";
+// import * as definitions from "./interfaces/definitions.js";
 
 import { ApiPromise, Keyring, WsProvider } from "@polkadot/api";
 import { mnemonicGenerate, blake2AsHex } from "@polkadot/util-crypto";
@@ -186,3 +186,22 @@ async function initApi(url) {
   
     return flag;
   }
+
+  /**
+ * Generate random string useful for username and phone number generation
+ *
+ * @param len - target string length
+ * @param charSet - characters that can appear in target string
+ * @returns {string} - randomly generated string
+ */
+export function randomString(len, charSet) {
+    charSet =
+      charSet || "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let randomString = "";
+    for (let i = 0; i < len; i++) {
+      const randomPoz = Math.floor(Math.random() * charSet.length);
+      randomString += charSet.substring(randomPoz, randomPoz + 1);
+    }
+    return randomString;
+  }
+  
