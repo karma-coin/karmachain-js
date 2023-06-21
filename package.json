@@ -17,6 +17,7 @@
     "generate:defs": "ts-node-esm node_modules/.bin/polkadot-types-from-defs --package karmachain-js/interfaces --input ./src/interfaces --endpoint ./karmachain.json",
     "generate:meta": "ts-node-esm node_modules/.bin/polkadot-types-from-chain --package karmachain-js/interfaces --endpoint ./karmachain.json --output ./src/interfaces --strict",
     "build": "tsc -b --verbose",
+    "publish": "npm publish",
     "lint": "eslint . --ext .js,.ts",
     "test": "npm run setup:verifier && npm run setup:offchain && ava --serial",
     "setup:verifier": "curl --location 'http://localhost:9933/' --header 'Content-Type: application/json' --data '{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"author_insertKey\",\"params\":{\"key_type\":\"Veri\",\"suri\":\"//Alice\",\"public\":\"0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d\"}}'",
