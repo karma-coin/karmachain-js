@@ -1,5 +1,6 @@
 # Karmachain.js
-An npm package providing the Karmachain api to javascript clients and beyond
+An npm package providing the Karmachain api to javascript clients and beyond.
+Public releases are [published to npm](https://www.npmjs.com/package/karmachain2-js).
 
 ## Generating karmachain.json
 1. Run a local Karmachain node.
@@ -13,7 +14,6 @@ yarn load:meta
 ## Generating types
 ```bash
 yarn generate
-yarn lint
 ```
 
 ## docs and tutorial
@@ -57,3 +57,5 @@ curl --location 'http://localhost:9933/' \
     }
 }'
 ```
+
+## Publishing

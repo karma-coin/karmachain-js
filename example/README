@@ -1,0 +1,8 @@
+# Karmachain-js example
+A simple node app showing karmachain-js module usage.
+
+## Building
+```yarn```
+
+## Running
+```yarn start```

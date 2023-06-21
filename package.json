@@ -1,12 +1,12 @@
 {
-  "name": "karmachain-js",
+  "name": "karmachain2-js",
   "type": "module",
-  "version": "0.0.1",
-  "description": "Karmachain api types",
+  "version": "0.1.1",
+  "description": "Karmachain 2.0 api types",
   "repository": "https://github.com/karma-coin/karmachain-js",
   "author": "Avive <a@karmaco.in>",
   "license": "LicenseRef-LICENSE",
-  "private": true,
+  "private": false,
   "engines": {
     "node": ">=14.0.0"
   },
