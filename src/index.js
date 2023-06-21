@@ -119,9 +119,6 @@ async function initApi(url) {
         evidence.phone_number_hash
       )
       .signAndSend(pair);
-  
-    // Wait one block while transaction processed
-    await delay(12000);
   }
   
   export async function subscribeEvents(api, callback) {
