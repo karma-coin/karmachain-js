@@ -60,5 +60,5 @@ curl --location 'http://localhost:9933/' \
 
 ## Publishing
 ```
-npm publish
+yarn publish
 ```
