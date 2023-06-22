@@ -5,15 +5,17 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/app.js"
+    "start": "yarn setup:verifier && yarn setup:offchain && node src/app.js",
+    "setup:verifier": "curl --location 'http://localhost:9933/' --header 'Content-Type: application/json' --data '{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"author_insertKey\",\"params\":{\"key_type\":\"Veri\",\"suri\":\"//Alice\",\"public\":\"0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d\"}}'",
+    "setup:offchain": "curl --location 'http://localhost:9933/' --header 'Content-Type: application/json' --data '{\"id\":1,\"jsonrpc\":\"2.0\",\"method\":\"author_insertKey\",\"params\":{\"key_type\":\"rewa\",\"suri\":\"//Alice\",\"public\":\"0xd43593c715fdd31c61141abd04a99fd6822c8558854ccde39a5684e7a56da27d\"}}'"
   },
   "type": "module",
-  "author": "avive",
+  "author": "Avive <a@karmaco.in>",
   "license": "ISC",
   "private": true,
   "dependencies": {
     "@polkadot/api": "^10.7.1",
     "@polkadot/util-crypto": "^12.2.1",  
-    "karmachain2-js": "file:../"
+    "karmachain2-js": "^0.1.3"
   }
 }
