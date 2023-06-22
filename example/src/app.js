@@ -1,6 +1,4 @@
-/* eslint-disable no-import-assign */
 /* eslint-disable no-undef */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as api from "karmachain2-js/src/index.js";
 
 // local default node ws endpoint
@@ -9,7 +7,7 @@ const wsUrl = "ws://127.0.0.1:9944";
 // init the api using a local node ws endpoint with test accounts
 await api.init(wsUrl, true);
 
-// set api events callbacks
+// setup a bunch of api events callbacks
 
 // new user callback - should call back to dart app
 api.callbacks.newUserEventCallback = (extrinsic, newUserEvent, userInfo) => {
@@ -51,6 +49,7 @@ api.callbacks.appreciationEventCallback = (extrinsic, appreciationEvent) => {
 };
 
 // subscribe to events using the default callback
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const unsubscribe = await api.subscribeAccountEvents(
   api.context.users[0].pair.address,
   api.accountEventsCallback
@@ -90,3 +89,5 @@ export function delay(milliseconds) {
     setTimeout(resolve, milliseconds);
   });
 }
+
+// call unsubscribe() to unsubscribe from events...
