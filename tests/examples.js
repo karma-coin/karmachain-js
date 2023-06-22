@@ -196,6 +196,7 @@ test("Get a list of users with pagination with optional alphanumeric prefix filt
 
 test("Subscribe on finalized blocks", async(t) => {
   let newUserCounter = 0;
+  let newUserEventCounter = 0;
   let appreciationCounter = 0;
 
    await delay(48000);
@@ -203,6 +204,12 @@ test("Subscribe on finalized blocks", async(t) => {
   const unsubscribe = await subscribeEvents(t.context.api, (extrinsic, events) => {
     if (t.context.api.tx.identity.newUser.is(extrinsic)) {
       newUserCounter += 1;
+      
+      if (events.find((event) =>
+          t.context.api.events.identity.NewUser.is(event.event)
+        )) {
+        newUserEventCounter += 1;
+      }
     }
 
     if (t.context.api.tx.appreciation.appreciation.is(extrinsic)) {
@@ -241,6 +248,7 @@ test("Subscribe on finalized blocks", async(t) => {
   await delay(48000);
 
   t.is(newUserCounter, 2);
+  t.is(newUserEventCounter, 2);
   t.is(appreciationCounter, 1);
 
   unsubscribe();
