@@ -1,8 +1,8 @@
 // import { ApiPromise, Keyring, WsProvider } from "@polkadot/api";
-// import * as definitions from "karmachain2-js/src/interfaces/definitions.js";
+import * as definitions from "karmachain2-js/src/interfaces/definitions.js";
 // import { mnemonicGenerate, blake2AsHex } from "@polkadot/util-crypto";
 // import { decodeAddress } from "@polkadot/util-crypto";
-import * as karmachainapi from "karmachain2-js/src/index.js";
+import * as karmaChainApi from "karmachain2-js/src/index.js";
 
 // local default node ws endpoint
 const wsUrl = "ws://127.0.0.1:9944";
@@ -16,7 +16,7 @@ export function delay(milliseconds) {
 var context;
 
 async function init(url) {
-  context = await karmachainapi.init(url);
+  context = await karmaChainApi.init(url);
 }
 
 // Get a key pair from a mnemonic e.g. 'entire material egg meadow latin bargain dutch coral blood melt acoustic thought'. Client securily store the mnemonic and use it to create keys in app session.
@@ -24,13 +24,13 @@ function getKeyPairFromMnemonic(mnemonic, name) {
   return context.keyring.addFromUri(mnemonic, { name: name });
 }
 
-// Create an onchain user acccount
+// Create an onchain user account
 async function createUser(keyPair, userName, phoneNumber) {
   if (context === undefined) {
     throw new Error("Context is undefined. Call init() first.");
   }
-  console.log("Creating new user tx...");
-  await karmachainapi.call_new_user(
+ 
+  await karmaChainApi.call_new_user(
     context.api,
     keyPair,
     userName,
@@ -40,47 +40,47 @@ async function createUser(keyPair, userName, phoneNumber) {
 
 // Get account info for an account id
 async function getUserByAccountId(accountId) {
-  return await context.api.rpc.identity.getUserInfoByAccountId.raw(accountId);
+  return context.api.rpc.identity.getUserInfoByAccountId.raw(accountId);
 }
 
 // Get account info for an account id
 async function getUserByUserName(userName) {
-  return await context.api.rpc.identity.getUserInfoByUsername.raw(userName);
+  return context.api.rpc.identity.getUserInfoByUsername.raw(userName);
 }
 
 // Get account info for a phone number
 async function getUserByPhoneNumber(phoneNumber) {
-  return await context.api.rpc.identity.getUserInfoByPhoneNumber.raw(
-    phoneNumber
-  );
+  return context.api.rpc.identity.getUserInfoByPhoneNumber.raw(phoneNumber);
 }
 
 // Get all users in a community
 async function getUsersByCommunity(communityId) {
-  return await context.api.rpc.community.getAllUsers(communityId);
+  return context.api.rpc.community.getAllUsers(communityId);
 }
 
-// Get contcts with optional prefix
+// Get contacts with optional prefix
 async function getContacts(prefix, communitId) {
-  return await context.api.rpc.community.getContacts(prefix, communityId);
+  return context.api.rpc.community.getContacts(prefix, communityId);
 }
 
 // Get leaderboard for a community
 async function getLeaderboard(communityId) {
-  return await context.api.rpc.community.getLeaderBoard(communityId);
+  return context.api.rpc.community.getLeaderBoard(communityId);
 }
 
-async function subscribeAccountEvents(accountId, callback) {
-  return await karmachainapi.subscribeAccountEvents(
-    context.api,
-    accountId,
-    callback
+async function getTransactions(accountId) {
+  return context.api.rpc.transactions.getTransactions.raw(
+    context.users[0].pair.address
   );
 }
 
-async function appreciate(keyPair, toPhoneNumber, amount) {
-  return await context.api.tx.appreciation
-    .appreciation({ phoneNumber: toPhoneNumber }, amount, null, null)
+async function subscribeAccountEvents(accountId, callback) {
+  return karmaChainApi.subscribeAccountEvents(context.api, accountId, callback);
+}
+
+async function appreciateWithPhoneNumber(keyPair, phoneNumberHash, amount, communityId, charTrait) {
+  return context.api.tx.appreciation
+    .appreciation({ PhoneNumberHash: phoneNumberHash }, amount, communityId, charTrait)
     .signAndSend(keyPair);
 }
 
@@ -89,24 +89,50 @@ async function appreciate(keyPair, toPhoneNumber, amount) {
 // init the context
 await init(wsUrl);
 
-const unsubscribe = await subscribeAccountEvents(
-  context.users[0].pair.address,
-  async (extrinsic, events) => {
-    if (context.api.tx.identity.newUser.is(extrinsic)) {
-      const newUserEvent = events.find((event) => context.api.events.identity.NewUser.is(event.event));
+async function accountEventCallback(extrinsic, events) {
+  if (context.api.tx.identity.newUser.is(extrinsic)) {
+    const newUserEvent = events.find((event) =>
+      context.api.events.identity.NewUser.is(event.event)
+    );
+    if (newUserEvent) {
+      // get user info
+      const userInfo = await getUserByAccountId(context.users[0].pair.address);
+      console.log("User name: " + userInfo.user_name, ", phone hash: ", userInfo.phone_number_hash);
 
-      if (newUserEvent) {
-        // get user info
-        const userInfo = await getUserByAccountId(
-          context.users[0].pair.address
-        );
-        console.log(userInfo.user_name, " ", userInfo.phone_number_hash);
-        unsubscribe();
-      }
+      console.log("Sending appreciation...");
+      await appreciateWithPhoneNumber(context.users[0].pair, context.users[1].phoneNumberHash, 100, null, 33);
+    }
+
+    const transferEvent = events.find((event) =>
+      context.api.events.balances.Transfer.is(event.event)
+    );
+
+    if (transferEvent) {
+      console.log(
+        "from: " + transferEvent.event.data.from,
+        ", to: " + transferEvent.event.data.to,
+        ", amount: " + transferEvent.event.data.value
+      );
+    }
+
+    const appreciationEvent = events.find((event) =>
+      context.api.events.appreciation.Appreciation.is(event.event)
+    );
+
+    if (appreciationEvent) {
+      console.log("Appreciation event: ", appreciationEvent.event.data);
     }
   }
+}
+
+const unsubscribe = await subscribeAccountEvents(
+  context.users[0].pair.address,
+  accountEventCallback
 );
 
+
+console.log("Creating new user...");
+ 
 // create a user
 await createUser(
   context.users[0].pair,
@@ -114,6 +140,4 @@ await createUser(
   context.users[0].phoneNumber
 );
 
-// send appreication by phone number
 
-//PhoneNumber
