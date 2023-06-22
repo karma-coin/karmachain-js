@@ -1,7 +1,8 @@
+/* eslint-disable no-undef */
 // Required imports
 import { ApiPromise, Keyring, WsProvider } from "@polkadot/api";
 import * as definitions from "../src/interfaces/definitions.js";
-import { decodeAddress } from "@polkadot/util-crypto";
+// import { decodeAddress } from "@polkadot/util-crypto";
 import { mnemonicGenerate, blake2AsHex } from "@polkadot/util-crypto";
 
 export const BYPASS_TOKEN = "dummy";
@@ -154,9 +155,8 @@ export async function subscribeEvents(api, callback) {
         ({ phase }) =>
           phase.isApplyExtrinsic && phase.asApplyExtrinsic.eq(index)
       );
-      
-      callback(extrinsic, events)
-    })
+      callback(extrinsic, events);
+    });
   });
 }
 

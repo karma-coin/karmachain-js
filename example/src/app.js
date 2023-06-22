@@ -1,20 +1,12 @@
-// import { ApiPromise, Keyring, WsProvider } from "@polkadot/api";
-import * as definitions from "karmachain2-js/src/interfaces/definitions.js";
-// import { mnemonicGenerate, blake2AsHex } from "@polkadot/util-crypto";
-// import { decodeAddress } from "@polkadot/util-crypto";
+/* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { mnemonicGenerate, blake2AsHex } from "@polkadot/util-crypto";
 import * as karmaChainApi from "karmachain2-js/src/index.js";
 
-// local default node ws endpoint
-const wsUrl = "ws://127.0.0.1:9944";
-
-export function delay(milliseconds) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, milliseconds);
-  });
-}
-
+// an api context
 var context;
 
+// Init the api with a ws url
 async function init(url) {
   context = await karmaChainApi.init(url);
 }
@@ -24,12 +16,22 @@ function getKeyPairFromMnemonic(mnemonic, name) {
   return context.keyring.addFromUri(mnemonic, { name: name });
 }
 
-// Create an onchain user account
+// Get a canonical hash for a phone number
+function getHash(phoneNumber) {
+  return blake2AsHex(phoneNumber, 512);
+}
+
+// Generate a new BIP39 mnemonic
+function generateMnemonic() {
+  return mnemonicGenerate();
+}
+
+// Create an on-chain user account
 async function createUser(keyPair, userName, phoneNumber) {
   if (context === undefined) {
     throw new Error("Context is undefined. Call init() first.");
   }
- 
+
   await karmaChainApi.call_new_user(
     context.api,
     keyPair,
@@ -59,7 +61,7 @@ async function getUsersByCommunity(communityId) {
 }
 
 // Get contacts with optional prefix
-async function getContacts(prefix, communitId) {
+async function getContactsByCommunity(prefix, communitId) {
   return context.api.rpc.community.getContacts(prefix, communityId);
 }
 
@@ -69,26 +71,40 @@ async function getLeaderboard(communityId) {
 }
 
 async function getTransactions(accountId) {
-  return context.api.rpc.transactions.getTransactions.raw(
-    context.users[0].pair.address
-  );
+  return context.api.rpc.transactions.getTransactions.raw(accountId);
 }
 
 async function subscribeAccountEvents(accountId, callback) {
   return karmaChainApi.subscribeAccountEvents(context.api, accountId, callback);
 }
 
-async function appreciateWithPhoneNumber(keyPair, phoneNumberHash, amount, communityId, charTrait) {
+async function appreciateWithPhoneNumber(
+  keyPair,
+  phoneNumberHash,
+  amount,
+  communityId,
+  charTrait
+) {
   return context.api.tx.appreciation
-    .appreciation({ PhoneNumberHash: phoneNumberHash }, amount, communityId, charTrait)
+    .appreciation(
+      { PhoneNumberHash: phoneNumberHash },
+      amount,
+      communityId,
+      charTrait
+    )
     .signAndSend(keyPair);
 }
 
-///////// example usage below
+// async function (Extrinsic, NewUserEvent, UserInfo)
+var newUserEventCallback;
 
-// init the context
-await init(wsUrl);
+// async function (Extrinsic, TransferEvent)
+var transferEventCallback;
 
+// async function (Extrinsic, AppreciationEvent)
+var appreciationEventCallback;
+
+// a default events callback implementation - calls back user-provided callback functions
 async function accountEventCallback(extrinsic, events) {
   if (context.api.tx.identity.newUser.is(extrinsic)) {
     const newUserEvent = events.find((event) =>
@@ -97,10 +113,62 @@ async function accountEventCallback(extrinsic, events) {
     if (newUserEvent) {
       // get user info
       const userInfo = await getUserByAccountId(context.users[0].pair.address);
-      console.log("User name: " + userInfo.user_name, ", phone hash: ", userInfo.phone_number_hash);
+      if (newUserEventCallback !== undefined) {
+        newUserEventCallback(extrinsic, newUserEvent, userInfo);
+      }
+    }
 
-      console.log("Sending appreciation...");
-      await appreciateWithPhoneNumber(context.users[0].pair, context.users[1].phoneNumberHash, 100, null, 33);
+    const transferEvent = events.find((event) =>
+      context.api.events.balances.Transfer.is(event.event)
+    );
+
+    if (transferEvent) {
+      if (transferEventCallback !== undefined) {
+        transferEventCallback(extrinsic, transferEvent);
+      }
+    }
+
+    const appreciationEvent = events.find((event) =>
+      context.api.events.appreciation.Appreciation.is(event.event)
+    );
+
+    if (appreciationEvent) {
+      if (appreciationEventCallback !== undefined) {
+        appreciationEventCallback(extrinsic, appreciationEvent);
+      }
+    }
+  }
+}
+
+///////// example usage playground below
+
+// local default node ws endpoint
+const wsUrl = "ws://127.0.0.1:9944";
+
+// helper funciton
+export function delay(milliseconds) {
+  return new Promise((resolve) => {
+    // eslint-disable-next-line no-undef
+    setTimeout(resolve, milliseconds);
+  });
+}
+
+// init the api using a local node ws endpoint
+await init(wsUrl);
+
+async function myAccountEventCallback(extrinsic, events) {
+  if (context.api.tx.identity.newUser.is(extrinsic)) {
+    const newUserEvent = events.find((event) =>
+      context.api.events.identity.NewUser.is(event.event)
+    );
+    if (newUserEvent) {
+      // get user info
+      const userInfo = await getUserByAccountId(context.users[0].pair.address);
+      console.log(
+        "User name: " + userInfo.user_name,
+        ", phone hash: ",
+        userInfo.phone_number_hash
+      );
     }
 
     const transferEvent = events.find((event) =>
@@ -127,17 +195,32 @@ async function accountEventCallback(extrinsic, events) {
 
 const unsubscribe = await subscribeAccountEvents(
   context.users[0].pair.address,
-  accountEventCallback
+  myAccountEventCallback
 );
 
+console.log("Creating new users...");
 
-console.log("Creating new user...");
- 
-// create a user
+// create user
 await createUser(
   context.users[0].pair,
   context.users[0].username,
   context.users[0].phoneNumber
 );
 
+// create another user
+await createUser(
+  context.users[1].pair,
+  context.users[1].username,
+  context.users[1].phoneNumber
+);
 
+await delay(24000);
+
+console.log("Sending appreciation...");
+await appreciateWithPhoneNumber(
+  context.users[1].pair,
+  context.users[0].phoneNumberHash,
+  100,
+  null,
+  33
+);
