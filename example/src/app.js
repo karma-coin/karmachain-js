@@ -165,43 +165,34 @@ export function delay(milliseconds) {
 // init the api using a local node ws endpoint
 await init(wsUrl);
 
-async function myAccountEventCallback(extrinsic, events) {
-  if (context.api.tx.identity.newUser.is(extrinsic)) {
-    const newUserEvent = events.find((event) =>
-      context.api.events.identity.NewUser.is(event.event)
-    );
-    if (newUserEvent) {
-      // get user info
-      const userInfo = await getUserByAccountId(context.users[0].pair.address);
-      console.log(
-        "User name: " + userInfo.user_name,
-        ", phone hash: ",
-        userInfo.phone_number_hash
-      );
-    }
-  }
+// set api callbacks
 
-  if (context.api.tx.appreciation.appreciation.is(extrinsic)) {
-    const appreciationEvent = events.find((event) =>
-      context.api.events.appreciation.Appreciation.is(event.event)
-    );
+// new user callback - should call back to dart app
+newUserEventCallback = (extrinsic, newUserEvent, userInfo) => {
+  console.log(
+    "New user event. User name: " +
+      userInfo.user_name +
+      ", phone hash: " +
+      userInfo.phone_number_hash
+  );
+};
 
-    if (appreciationEvent) {
-      console.log(
-        "Appreciation event. From: " +
-          appreciationEvent.event.data.payer +
-          ", to: " +
-          appreciationEvent.event.data.payee +
-          ", amount:" +
-          +appreciationEvent.event.data.amount
-      );
-    }
-  }
-}
+// appreciation callback
+appreciationEventCallback = (extrinsic, appreciationEvent) => {
+  console.log(
+    "Appreciation event. From: " +
+      appreciationEvent.event.data.payer +
+      ", to: " +
+      appreciationEvent.event.data.payee +
+      ", amount:" +
+      appreciationEvent.event.data.amount
+  );
+};
 
+// subscribe to events using the default callback
 const unsubscribe = await subscribeAccountEvents(
   context.users[0].pair.address,
-  myAccountEventCallback
+  accountEventCallback
 );
 
 console.log("Creating new users...");
