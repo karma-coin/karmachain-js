@@ -1,8 +1,9 @@
 import {
   call_new_user,
   defaultSetup,
-  delay, KCoin,
-  subscribeAccountEvents
+  delay,
+  KCoin,
+  subscribeAccountEvents,
 } from "./utils.js";
 import anyTest from "ava";
 

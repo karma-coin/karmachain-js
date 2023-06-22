@@ -106,6 +106,12 @@ var transferEventCallback;
 // async function (Extrinsic, AppreciationEvent)
 var appreciationEventCallback;
 
+// Signup reward callback
+var signupRewardCallback;
+
+// Referral reward callback
+var referralRewardCallback;
+
 // a default events callback implementation - calls back user-provided callback functions
 // set by the user of this library - see above
 async function accountEventCallback(extrinsic, events) {
@@ -142,6 +148,18 @@ async function accountEventCallback(extrinsic, events) {
     if (appreciationEvent) {
       if (appreciationEventCallback !== undefined) {
         appreciationEventCallback(extrinsic, appreciationEvent);
+      }
+    }
+  }
+
+  if (context.api.tx.reward.submitKarmaRewards.is(extrinsic)) {
+    const signupRewardEvent = events.find((event) =>
+      context.api.events.reward.RewardIssued.is(event.event)
+    );
+
+    if (signupRewardEvent) {
+      if (appreciationEventCallback !== undefined) {
+        signupRewardCallback(extrinsic, signupRewardEvent);
       }
     }
   }
@@ -184,6 +202,11 @@ newUserEventCallback = (extrinsic, newUserEvent, userInfo) => {
   );
 };
 
+// signup reward callback
+signupRewardCallback = (extrinsic, signupRewardEvent) => {
+  console.log("Signup reward event." + signupRewardEvent.toString());
+};
+
 // appreciation callback
 appreciationEventCallback = (extrinsic, appreciationEvent) => {
   const failed = context.api.events.system.ExtrinsicFailed.is(
@@ -197,7 +220,7 @@ appreciationEventCallback = (extrinsic, appreciationEvent) => {
       appreciationEvent.event.data.payee +
       ", amount:" +
       appreciationEvent.event.data.amount +
-      "status: " +
+      ", status: " +
       (failed ? "failed" : "success")
   );
 };

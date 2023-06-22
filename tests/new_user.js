@@ -116,9 +116,10 @@ test("Appreciation to a non-user, that person signs up and the appreciation is e
   );
 
   // Get information about sender of appreciation
-  const senderInfo = await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
-    t.context.users[0].pair.address
-  );
+  const senderInfo =
+    await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
+      t.context.users[0].pair.address
+    );
   t.is(senderInfo.account_id, t.context.users[0].pair.address);
   t.is(senderInfo.user_name, t.context.users[0].username);
   t.is(senderInfo.phone_number_hash, t.context.users[0].phoneNumberHash);
@@ -185,9 +186,10 @@ test("Appreciation by phone number", async (t) => {
   );
 
   // Get information about sender of appreciation
-  const senderInfo = await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
-    t.context.users[0].pair.address
-  );
+  const senderInfo =
+    await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
+      t.context.users[0].pair.address
+    );
   t.is(senderInfo.account_id, t.context.users[0].pair.address);
   t.is(senderInfo.user_name, t.context.users[0].username);
   t.is(senderInfo.phone_number_hash, t.context.users[0].phoneNumberHash);
@@ -298,12 +300,11 @@ test("Payment transaction (w/o an appreciation) between a user and non-user. The
     await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
       t.context.users[1].pair.address
     );
-  t.is(
-    infoAfterRegistration.account_id, t.context.users[1].pair.address
-  );
+  t.is(infoAfterRegistration.account_id, t.context.users[1].pair.address);
   t.is(infoAfterRegistration.user_name, t.context.users[1].username);
   t.is(
-    infoAfterRegistration.phone_number_hash, t.context.users[1].phoneNumberHash
+    infoAfterRegistration.phone_number_hash,
+    t.context.users[1].phoneNumberHash
   );
   // Coins send with appreciation + signup reward
   t.truthy(assertBalance(infoAfterRegistration.balance, KCoin + 10 * KCoin));
