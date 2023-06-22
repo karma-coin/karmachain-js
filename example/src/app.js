@@ -11,7 +11,7 @@ async function init(url) {
   context = await karmaChainApi.init(url);
 }
 
-// Get a key pair from a mnemonic e.g. 'entire material egg meadow latin bargain dutch coral blood melt acoustic thought'. Client securily store the mnemonic and use it to create keys in app session.
+// Get a key pair from a mnemonic e.g. 'entire material egg meadow latin bargain dutch coral blood melt acoustic thought'. Client should securily store the mnemonic and use it to create keypair in app session.
 function getKeyPairFromMnemonic(mnemonic, name) {
   return context.keyring.addFromUri(mnemonic, { name: name });
 }
@@ -24,20 +24,6 @@ function getHash(phoneNumber) {
 // Generate a new BIP39 mnemonic
 function generateMnemonic() {
   return mnemonicGenerate();
-}
-
-// Create an on-chain user account
-async function createUser(keyPair, userName, phoneNumber) {
-  if (context === undefined) {
-    throw new Error("Context is undefined. Call init() first.");
-  }
-
-  await karmaChainApi.call_new_user(
-    context.api,
-    keyPair,
-    userName,
-    phoneNumber
-  );
 }
 
 // Get account info for an account id
@@ -78,6 +64,20 @@ async function subscribeAccountEvents(accountId, callback) {
   return karmaChainApi.subscribeAccountEvents(context.api, accountId, callback);
 }
 
+// Create an on-chain user account
+async function createUser(keyPair, userName, phoneNumber) {
+  if (context === undefined) {
+    throw new Error("Context is undefined. Call init() first.");
+  }
+
+  await karmaChainApi.call_new_user(
+    context.api,
+    keyPair,
+    userName,
+    phoneNumber
+  );
+}
+
 async function appreciateWithPhoneNumber(
   keyPair,
   phoneNumberHash,
@@ -98,6 +98,7 @@ async function appreciateWithPhoneNumber(
 // async function (Extrinsic, NewUserEvent, UserInfo)
 var newUserEventCallback;
 
+// Fired for amount transfer which is not an appreicaiton
 // async function (Extrinsic, TransferEvent)
 var transferEventCallback;
 
@@ -105,6 +106,7 @@ var transferEventCallback;
 var appreciationEventCallback;
 
 // a default events callback implementation - calls back user-provided callback functions
+// set by the user of this library - see above
 async function accountEventCallback(extrinsic, events) {
   if (context.api.tx.identity.newUser.is(extrinsic)) {
     const newUserEvent = events.find((event) =>
@@ -117,7 +119,9 @@ async function accountEventCallback(extrinsic, events) {
         newUserEventCallback(extrinsic, newUserEvent, userInfo);
       }
     }
+  }
 
+  if (context.api.tx.balances.transfer.is(extrinsic)) {
     const transferEvent = events.find((event) =>
       context.api.events.balances.Transfer.is(event.event)
     );
@@ -127,7 +131,9 @@ async function accountEventCallback(extrinsic, events) {
         transferEventCallback(extrinsic, transferEvent);
       }
     }
+  }
 
+  if (context.api.tx.appreciation.appreciation.is(extrinsic)) {
     const appreciationEvent = events.find((event) =>
       context.api.events.appreciation.Appreciation.is(event.event)
     );
@@ -140,7 +146,10 @@ async function accountEventCallback(extrinsic, events) {
   }
 }
 
+//
 ///////// example usage playground below
+//
+//
 
 // local default node ws endpoint
 const wsUrl = "ws://127.0.0.1:9944";
@@ -170,25 +179,22 @@ async function myAccountEventCallback(extrinsic, events) {
         userInfo.phone_number_hash
       );
     }
+  }
 
-    const transferEvent = events.find((event) =>
-      context.api.events.balances.Transfer.is(event.event)
-    );
-
-    if (transferEvent) {
-      console.log(
-        "from: " + transferEvent.event.data.from,
-        ", to: " + transferEvent.event.data.to,
-        ", amount: " + transferEvent.event.data.value
-      );
-    }
-
+  if (context.api.tx.appreciation.appreciation.is(extrinsic)) {
     const appreciationEvent = events.find((event) =>
       context.api.events.appreciation.Appreciation.is(event.event)
     );
 
     if (appreciationEvent) {
-      console.log("Appreciation event: ", appreciationEvent.event.data);
+      console.log(
+        "Appreciation event. From: " +
+          appreciationEvent.event.data.payer +
+          ", to: " +
+          appreciationEvent.event.data.payee +
+          ", amount:" +
+          +appreciationEvent.event.data.amount
+      );
     }
   }
 }
