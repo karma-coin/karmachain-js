@@ -148,6 +148,75 @@ test("Appreciation to a non-user, that person signs up and the appreciation is e
   );
 });
 
+test("Appreciation by phone number", async (t) => {
+  await call_new_user(
+    t.context.api,
+    t.context.users[0].pair,
+    t.context.users[0].username,
+    t.context.users[0].phoneNumber
+  );
+
+  // Wait one block to check that transaction not included into the block
+  await delay(12000);
+
+  await t.context.api.tx.appreciation
+    .appreciation(
+      { PhoneNumberHash: t.context.users[1].phoneNumberHash },
+      KCoin,
+      null,
+      MINDFUL
+    )
+    .signAndSend(t.context.users[0].pair);
+  // Wait one block to check that transaction not included into the block
+  await delay(12000);
+
+  const info = await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
+    t.context.users[1].pair.address
+  );
+  // No user information should be provided, because user not registered on chain
+  t.falsy(info);
+
+  // Call `new_user` tx to register user
+  await call_new_user(
+    t.context.api,
+    t.context.users[1].pair,
+    t.context.users[1].username,
+    t.context.users[1].phoneNumber
+  );
+
+  // Get information about sender of appreciation
+  const senderInfo = await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
+    t.context.users[0].pair.address
+  );
+  t.is(senderInfo.account_id, t.context.users[0].pair.address);
+  t.is(senderInfo.user_name, t.context.users[0].username);
+  t.is(senderInfo.phone_number_hash, t.context.users[0].phoneNumberHash);
+  t.truthy(
+    assertBalance(senderInfo.balance, 10 * KCoin - KCoin + REFERRAL_REWARD)
+  );
+  t.truthy(
+    senderInfo.trait_scores.find(
+      (traitScore) => traitScore.trait_id === REFERRAL
+    )
+  );
+
+  // Get information about receiver of appreciation
+  const receiverInfo =
+    await t.context.api.rpc.identity.getUserInfoByAccountId.raw(
+      t.context.users[1].pair.address
+    );
+  t.is(receiverInfo.account_id, t.context.users[1].pair.address);
+  t.is(receiverInfo.user_name, t.context.users[1].username);
+  t.is(receiverInfo.phone_number_hash, t.context.users[1].phoneNumberHash);
+  // Coins send with appreciation + signup reward
+  t.truthy(assertBalance(receiverInfo.balance, KCoin + 10 * KCoin));
+  t.truthy(
+    receiverInfo.trait_scores.find(
+      (traitScore) => traitScore.trait_id === MINDFUL
+    )
+  );
+});
+
 test("Appreciation of an existing user.", async (t) => {
   const firstUserRegistration = call_new_user(
     t.context.api,
