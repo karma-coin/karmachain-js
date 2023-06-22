@@ -6,10 +6,10 @@ import * as definitions from "./interfaces/definitions.js";
 import { ApiPromise, Keyring, WsProvider } from "@polkadot/api";
 import { mnemonicGenerate, blake2AsHex } from "@polkadot/util-crypto";
 
+const BYPASS_TOKEN = "dummy";
+
 // an api context
 export var context;
-
-const BYPASS_TOKEN = "dummy";
 
 // Amount of tokens equal to one KarmaCoin
 export const KCoin = 1000000;
@@ -23,7 +23,7 @@ export const REFERRAL = 41;
 export const NO_COMMUNITY_ID = 0;
 export const NO_CHAR_TRAIT_ID = 0;
 
-// Client provided callbacks
+// Client provided callbacks holder
 export var callbacks = {
   newUserEventCallback: null,
   transferEventCallback: null,
@@ -32,10 +32,9 @@ export var callbacks = {
   referralRewardCallback: null,
 };
 
-// Init the api with a node's ws url
-// with optional test accounts for testing purposes
+// Init the api with a node's ws url with optional test accounts for testing purposes
 export async function init(url, createTestAccounts = false) {
-  // api context object
+  // setup the api's context
   context = {
     api: null,
     users: [],
@@ -73,32 +72,9 @@ export function getHash(phoneNumber) {
   return blake2AsHex(phoneNumber, 512);
 }
 
-// Generate a new BIP39 mnemonic
+// Generate a new BIP39 mnemonic from a random seed
 export function generateMnemonic() {
   return mnemonicGenerate();
-}
-
-// Signup a new user
-export async function signupUser(pair, username, phoneNumber) {
-  return createNewUser(context.api, pair, username, phoneNumber);
-}
-
-// Send an appreciation by phone number
-export async function appreciateWithPhoneNumber(
-  keyPair,
-  phoneNumberHash,
-  amount,
-  communityId,
-  charTrait
-) {
-  return context.api.tx.appreciation
-    .appreciation(
-      { PhoneNumberHash: phoneNumberHash },
-      amount,
-      communityId,
-      charTrait
-    )
-    .signAndSend(keyPair);
 }
 
 // Get account info for an account id
@@ -178,6 +154,33 @@ export function randomString(len, charSet) {
   return randomString;
 }
 
+// Karmachain transactions below
+
+// Signup a new user
+export async function signupUser(pair, username, phoneNumber) {
+  return createNewUser(context.api, pair, username, phoneNumber);
+}
+
+// Send an appreciation by phone number
+export async function appreciateWithPhoneNumber(
+  keyPair,
+  phoneNumberHash,
+  amount,
+  communityId,
+  charTrait
+) {
+  return context.api.tx.appreciation
+    .appreciation(
+      { PhoneNumberHash: phoneNumberHash },
+      amount,
+      communityId,
+      charTrait
+    )
+    .signAndSend(keyPair);
+}
+
+// end of karmachain transactions
+
 // a default events callback implementation - calls back user-provided callback functions
 export async function accountEventsCallback(extrinsic, events) {
   if (context.api.tx.identity.newUser.is(extrinsic)) {
@@ -250,7 +253,7 @@ export async function subscribeEvents(api, callback) {
 }
 
 //
-/// internal helpers below
+/// internal helper functions below
 //
 
 // Create a new user
