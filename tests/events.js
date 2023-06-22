@@ -139,8 +139,8 @@ test("Insufficient funds tx", async (t) => {
     .appreciation(
       { AccountId: t.context.users[1].pair.address },
       5000 * KCoin,
-      null,
-      null
+      NO_COMMUNITY_ID,
+      NO_CHAR_TRAIT_ID
     )
     .signAndSend(t.context.users[0].pair)
     .catch(() => {

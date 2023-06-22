@@ -4,7 +4,7 @@
 import "./interfaces/augment-api.js";
 import "./interfaces/augment-types.js";
 
-// import * as definitions from "./interfaces/definitions.js";
+import * as definitions from "./interfaces/definitions.js";
 
 import { ApiPromise, Keyring, WsProvider } from "@polkadot/api";
 import { mnemonicGenerate, blake2AsHex } from "@polkadot/util-crypto";

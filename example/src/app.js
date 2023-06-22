@@ -1,5 +1,5 @@
 // import { ApiPromise, Keyring, WsProvider } from "@polkadot/api";
-import * as definitions from "karmachain2-js/src/interfaces/definitions.js";
+// import * as definitions from "karmachain2-js/src/interfaces/definitions.js";
 // import { mnemonicGenerate, blake2AsHex } from "@polkadot/util-crypto";
 // import { decodeAddress } from "@polkadot/util-crypto";
 import * as karmachainapi from 'karmachain2-js/src/index.js';
@@ -72,6 +72,18 @@ async function subscribeAccountEvents(accountId, callback) {
     return await karmachainapi.subscribeAccountEvents(context.api, accountId, callback);
 }
 
+async function appreciate(keyPair, toPhoneNumber, amount) {
+    return await context.api.tx.appreciation
+      .appreciation(
+        { phoneNumber: toPhoneNumber },
+        amount,
+        null,
+        null
+      )
+      .signAndSend(keyPair);
+  
+}
+
 
 ///////// example usage below
 
@@ -79,13 +91,13 @@ async function subscribeAccountEvents(accountId, callback) {
 // init the context
 await init(wsUrl);
 
-// create a user
-await createUser(context.users[0].pair, context.users[0].username, context.users[0].phoneNumber);
-
 const unsubscribe = await subscribeAccountEvents(
     context.users[0].pair.address,
     (extrinsic, events) => {
       if (context.api.tx.identity.newUser.is(extrinsic)) {
+        events.forEach((event) => {
+            console.log(event.event.toHuman());
+        });
         events.find(async (event) => {
             console.log(event.event);
             if (context.api.events.identity.NewUser.is(event.event)) {
@@ -97,5 +109,13 @@ const unsubscribe = await subscribeAccountEvents(
         });
         }
     });
+    
+// create a user
+await createUser(context.users[0].pair, context.users[0].username, context.users[0].phoneNumber);
 
+// send appreication by phone number
+
+
+
+//PhoneNumber
 
