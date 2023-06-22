@@ -1,5 +1,12 @@
 import anyTest from "ava";
-import { call_new_user, subscribeEvents, defaultSetup, delay, KCoin, MINDFUL } from "./utils.js";
+import {
+  call_new_user,
+  subscribeEvents,
+  defaultSetup,
+  delay,
+  KCoin,
+  MINDFUL,
+} from "./utils.js";
 
 const test = anyTest;
 
@@ -194,28 +201,32 @@ test("Get a list of users with pagination with optional alphanumeric prefix filt
   t.is(tomaContacts.length, 1);
 });
 
-test("Subscribe on finalized blocks", async(t) => {
+test("Subscribe on finalized blocks", async (t) => {
   let newUserCounter = 0;
   let newUserEventCounter = 0;
   let appreciationCounter = 0;
 
-   await delay(48000);
+  await delay(48000);
 
-  const unsubscribe = await subscribeEvents(t.context.api, (extrinsic, events) => {
-    if (t.context.api.tx.identity.newUser.is(extrinsic)) {
-      newUserCounter += 1;
-      
-      if (events.find((event) =>
-          t.context.api.events.identity.NewUser.is(event.event)
-        )) {
-        newUserEventCounter += 1;
+  const unsubscribe = await subscribeEvents(
+    t.context.api,
+    (extrinsic, events) => {
+      if (t.context.api.tx.identity.newUser.is(extrinsic)) {
+        newUserCounter += 1;
+        if (
+          events.find((event) =>
+            t.context.api.events.identity.NewUser.is(event.event)
+          )
+        ) {
+          newUserEventCounter += 1;
+        }
+      }
+
+      if (t.context.api.tx.appreciation.appreciation.is(extrinsic)) {
+        appreciationCounter += 1;
       }
     }
-
-    if (t.context.api.tx.appreciation.appreciation.is(extrinsic)) {
-      appreciationCounter += 1;
-    }
-  });
+  );
 
   const firstUserRegistration = call_new_user(
     t.context.api,
@@ -243,7 +254,7 @@ test("Subscribe on finalized blocks", async(t) => {
     .signAndSend(t.context.users[0].pair);
 
   // Wait 1 block for transaction to process and blocks to finalize.
-  // Finalization is 2 blocks behind best block, so wait for 2 additioanl blocks 
+  // Finalization is 2 blocks behind best block, so wait for 2 additioanl blocks
   // Waiting for one block to be suee that block finalized
   await delay(48000);
 
@@ -252,4 +263,4 @@ test("Subscribe on finalized blocks", async(t) => {
   t.is(appreciationCounter, 1);
 
   unsubscribe();
-})
+});

@@ -56,6 +56,7 @@ async function getLeaderboard(communityId) {
   return context.api.rpc.community.getLeaderBoard(communityId);
 }
 
+// Get all on-chain txs to or from an account id
 async function getTransactions(accountId) {
   return context.api.rpc.transactions.getTransactions.raw(accountId);
 }
@@ -169,23 +170,35 @@ await init(wsUrl);
 
 // new user callback - should call back to dart app
 newUserEventCallback = (extrinsic, newUserEvent, userInfo) => {
+  const failed = context.api.events.system.ExtrinsicFailed.is(
+    newUserEvent.event
+  );
+
   console.log(
     "New user event. User name: " +
       userInfo.user_name +
       ", phone hash: " +
-      userInfo.phone_number_hash
+      userInfo.phone_number_hash +
+      ", status: " +
+      (failed ? "failed" : "success")
   );
 };
 
 // appreciation callback
 appreciationEventCallback = (extrinsic, appreciationEvent) => {
+  const failed = context.api.events.system.ExtrinsicFailed.is(
+    appreciationEvent.event
+  );
+
   console.log(
     "Appreciation event. From: " +
       appreciationEvent.event.data.payer +
       ", to: " +
       appreciationEvent.event.data.payee +
       ", amount:" +
-      appreciationEvent.event.data.amount
+      appreciationEvent.event.data.amount +
+      "status: " +
+      (failed ? "failed" : "success")
   );
 };
 
