@@ -36,6 +36,11 @@ api.callbacks.appreciationEventCallback = (extrinsic, appreciationEvent) => {
   );
 };
 
+// coin transfer callback
+api.callbacks.transferEventCallback = (extrinsic, transferEvent) => {
+  console.log(transferEvent.toHuman());
+};
+
 // subscribe to events using the default callback
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const unsubscribe = await api.subscribeAccountEvents(
@@ -69,6 +74,23 @@ await api.appreciateWithPhoneNumber(
   null,
   33
 );
+
+await delay(24000);
+
+console.log("Sending payment tx...");
+await api.appreciateWithPhoneNumber(
+  api.context.users[1].pair,
+  api.context.users[0].phoneNumberHash,
+  100,
+  null,
+  null
+);
+
+await delay(24000);
+
+// todo: send simple coin transfer from 1 to 0
+
+// todo: test getting all available chain meta-data from api here... e.g. netId, other params, chainspec?
 
 // helper funciton
 export function delay(milliseconds) {
