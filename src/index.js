@@ -112,11 +112,11 @@ export async function getTransactions(accountId) {
 }
 
 export async function getBlockchainData() {
-  return context.api.rpc.chain.getBlockchainData()
+  return context.api.rpc.chain.getBlockchainData();
 }
 
 export async function getGenesisData() {
-  return context.api.rpc.chain.getGenesisData()
+  return context.api.rpc.chain.getGenesisData();
 }
 
 export async function subscribeAccountEvents(accountId, callback) {
@@ -186,12 +186,10 @@ export async function appreciateWithPhoneNumber(
     .signAndSend(keyPair);
 }
 
-export async function simpleTransfer(
-  keyPair,
-  accountId,
-  amount
-) {
-  return context.api.tx.balances.transfer(accountId, amount).signAndSend(keyPair);
+export async function simpleTransfer(keyPair, accountId, amount) {
+  return context.api.tx.balances
+    .transfer(accountId, amount)
+    .signAndSend(keyPair);
 }
 
 // end of karmachain transactions

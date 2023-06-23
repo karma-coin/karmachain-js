@@ -77,7 +77,7 @@ api.callbacks.appreciationEventCallback = (
 
 api.callbacks.transferEventCallback = (extrinsic, transferEvent, failed) => {
   console.log("Transfer event.");
-}
+};
 
 // Fetch blockhain data
 const blockchainData = await api.getBlockchainData();
