@@ -23,12 +23,47 @@ export const REFERRAL = 41;
 export const NO_COMMUNITY_ID = 0;
 export const NO_CHAR_TRAIT_ID = 0;
 
-// Client provided callbacks holder
+// Jscript channel names for client provided channel callbacks
+export const NEW_USER_EVENT_CHANNEL_NAME = "newUserEventCallback";
+export const TRANSFER_EVENT_CHANNEL_NAME = "transferEventCallback";
+export const APPRECIATION_EVENT_CHANNEL_NAME = "appreciationEventCallback";
+export const REWARD_EVENT_CHANNEL_NAME = "rewardEventCallback";
+
+// Callbacks holder with default implementations. Client can override them
 export var callbacks = {
-  newUserEventCallback: null,
-  transferEventCallback: null,
-  appreciationEventCallback: null,
-  rewardEventCallback: null,
+  newUserEventCallback: (extrinsic, newUserEvent, userInfo, failed) => {
+    // eslint-disable-next-line no-undef
+    sendMessage(NEW_USER_EVENT_CHANNEL_NAME, {
+      extrinsic: extrinsic,
+      newUserEvent: newUserEvent,
+      userInfo: userInfo,
+      failed: failed,
+    });
+  },
+  transferEventCallback: (extrinsic, transferEvent, failed) => {
+    // eslint-disable-next-line no-undef
+    sendMessage(TRANSFER_EVENT_CHANNEL_NAME, {
+      extrinsic: extrinsic,
+      transferEvent: transferEvent,
+      failed: failed,
+    });
+  },
+  appreciationEventCallback: (extrinsic, appreciationEvent, failed) => {
+    // eslint-disable-next-line no-undef
+    sendMessage(APPRECIATION_EVENT_CHANNEL_NAME, {
+      extrinsic: extrinsic,
+      appreciationEvent: appreciationEvent,
+      failed: failed,
+    });
+  },
+  rewardEventCallback: (extrinsic, rewardEvent, failed) => {
+    // eslint-disable-next-line no-undef
+    sendMessage(REWARD_EVENT_CHANNEL_NAME, {
+      extrinsic: extrinsic,
+      rewardEvent: rewardEvent,
+      failed: failed,
+    });
+  },
 };
 
 // Init the api with a node's ws url with optional test accounts for testing purposes
@@ -119,8 +154,29 @@ export async function getGenesisData() {
   return context.api.rpc.chain.getGenesisData();
 }
 
-export async function subscribeAccountEvents(accountId, callback) {
-  return subscribeAccountEventsImpl(context.api, accountId, callback);
+var unsubscribeAccountEventsFunction = null;
+
+// Unsubscribe from account events
+export function unsubscribeAccountEvents() {
+  if (unsubscribeAccountEventsFunction !== null) {
+    unsubscribeAccountEventsFunction();
+  }
+}
+
+// Subscribe to account events for a specific account
+// Default callbacks will be used unless callback is provided as an argument
+export async function subscribeAccountEvents(
+  accountId,
+  callback = accountEventsCallback
+) {
+  unsubscribeAccountEvents();
+  unsubscribeAccountEventsFunction = subscribeAccountEventsImpl(
+    context.api,
+    accountId,
+    callback
+  );
+
+  return unsubscribeAccountEventsFunction;
 }
 
 /**

@@ -8,7 +8,7 @@ const wsUrl = "ws://127.0.0.1:9944";
 // init the api using a local node ws endpoint with test accounts
 await api.init(wsUrl, true);
 
-// setup a bunch of api events callbacks
+// setup a bunch of api events callbacks overriding the default ones
 
 // new user callback - should call back to dart app
 api.callbacks.newUserEventCallback = (
@@ -54,7 +54,7 @@ api.callbacks.rewardEventCallback = (extrinsic, rewardEvent, failed) => {
   }
 
   if (rewardEvent.data.rewardType.eq("Subsidy")) {
-    console.log("Subsidy reward");
+    console.log("TX fee swubsidy");
   }
 };
 
@@ -77,20 +77,19 @@ api.callbacks.appreciationEventCallback = (
 };
 
 api.callbacks.transferEventCallback = (extrinsic, transferEvent, failed) => {
-  console.log("Transfer event.");
+  console.log("Transfer event. " + transferEvent.event.toHuman());
 };
 
 // Fetch blockhain data
 const blockchainData = await api.getBlockchainData();
 const genesisData = await api.getGenesisData();
-console.log(blockchainData.toHuman());
-console.log(genesisData.toHuman());
+console.log("Blockchain data: " + blockchainData.toHuman());
+console.log("Genesis data: " + genesisData.toHuman());
 
-// subscribe to events using the default callback
+// Subscribe to events related a user account's address using the default callback
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const unsubscribe = await api.subscribeAccountEvents(
-  api.context.users[0].pair.address,
-  api.accountEventsCallback
+  api.context.users[0].pair.address
 );
 
 console.log("Creating new users...");
@@ -122,6 +121,7 @@ await api.appreciateWithPhoneNumber(
 
 await delay(24000);
 
+// send a simple transfer
 await api.simpleTransfer(
   api.context.users[1].pair,
   api.context.users[0].pair.address,
