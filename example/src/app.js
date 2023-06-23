@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-undef */
 import * as api from "karmachain2-js/src/index.js";
 
@@ -10,36 +11,80 @@ await api.init(wsUrl, true);
 // setup a bunch of api events callbacks
 
 // new user callback - should call back to dart app
-api.callbacks.newUserEventCallback = (extrinsic, newUserEvent, userInfo) => {
+api.callbacks.newUserEventCallback = (
+  extrinsic,
+  newUserEvent,
+  userInfo,
+  failed
+) => {
   console.log(
     "New user event. User name: " +
       userInfo.user_name +
       ", phone hash: " +
-      userInfo.phone_number_hash
+      userInfo.phone_number_hash +
+      ", status: " +
+      (failed ? "failed" : "success")
   );
 };
 
 // signup reward callback
-api.callbacks.signupRewardCallback = (extrinsic, signupRewardEvent) => {
-  console.log("Signup reward event." + signupRewardEvent.toString());
+api.callbacks.rewardEventCallback = (extrinsic, rewardEvent, failed) => {
+  console.log(
+    "Reward event. " +
+      "Who: " +
+      rewardEvent.data.who +
+      ", amount: " +
+      rewardEvent.data.amount +
+      ", type: " +
+      rewardEvent.data.rewardType +
+      ", status: " +
+      (failed ? "failed" : "success")
+  );
+
+  if (rewardEvent.data.rewardType.eq("Signup")) {
+    console.log("Signup reward");
+  }
+
+  if (rewardEvent.data.rewardType.eq("Referral")) {
+    console.log("Referral reward");
+  }
+
+  if (rewardEvent.data.rewardType.eq("Karma")) {
+    console.log("Karma reward");
+  }
+
+  if (rewardEvent.data.rewardType.eq("Subsidy")) {
+    console.log("Subsidy reward");
+  }
 };
 
 // appreciation callback
-api.callbacks.appreciationEventCallback = (extrinsic, appreciationEvent) => {
+api.callbacks.appreciationEventCallback = (
+  extrinsic,
+  appreciationEvent,
+  failed
+) => {
   console.log(
     "Appreciation event. From: " +
-      appreciationEvent.event.data.payer +
+      appreciationEvent.data.payer +
       ", to: " +
-      appreciationEvent.event.data.payee +
+      appreciationEvent.data.payee +
       ", amount:" +
-      appreciationEvent.event.data.amount
+      appreciationEvent.data.amount +
+      ", status: " +
+      (failed ? "failed" : "success")
   );
 };
 
-// coin transfer callback
-api.callbacks.transferEventCallback = (extrinsic, transferEvent) => {
-  console.log(transferEvent.toHuman());
+api.callbacks.transferEventCallback = (extrinsic, transferEvent, failed) => {
+  console.log("Transfer event.");
 };
+
+// Fetch blockhain data
+const blockchainData = await api.getBlockchainData();
+const genesisData = await api.getGenesisData();
+console.log(blockchainData.toHuman());
+console.log(genesisData.toHuman());
 
 // subscribe to events using the default callback
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -77,20 +122,11 @@ await api.appreciateWithPhoneNumber(
 
 await delay(24000);
 
-console.log("Sending payment tx...");
-await api.appreciateWithPhoneNumber(
+await api.simpleTransfer(
   api.context.users[1].pair,
-  api.context.users[0].phoneNumberHash,
-  100,
-  null,
-  null
+  api.context.users[0].pair.address,
+  100
 );
-
-await delay(24000);
-
-// todo: send simple coin transfer from 1 to 0
-
-// todo: test getting all available chain meta-data from api here... e.g. netId, other params, chainspec?
 
 // helper funciton
 export function delay(milliseconds) {
@@ -100,4 +136,4 @@ export function delay(milliseconds) {
   });
 }
 
-// call unsubscribe() to unsubscribe from events...
+// call unsubscribe() to unsubscribe from events
