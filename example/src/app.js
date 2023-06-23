@@ -10,11 +10,7 @@ await api.init(wsUrl, true);
 // setup a bunch of api events callbacks
 
 // new user callback - should call back to dart app
-api.callbacks.newUserEventCallback = (extrinsic, newUserEvent, userInfo) => {
-  const failed = api.context.api.events.system.ExtrinsicFailed.is(
-    newUserEvent.event
-  );
-
+api.callbacks.newUserEventCallback = (extrinsic, newUserEvent, userInfo, failed) => {
   console.log(
     "New user event. User name: " +
       userInfo.user_name +
@@ -26,23 +22,40 @@ api.callbacks.newUserEventCallback = (extrinsic, newUserEvent, userInfo) => {
 };
 
 // signup reward callback
-api.callbacks.signupRewardCallback = (extrinsic, signupRewardEvent) => {
-  console.log("Signup reward event." + signupRewardEvent.toString());
+api.callbacks.rewardEventCallback = (extrinsic, rewardEvent, failed) => {
+  console.log("Reward event. " +
+    "Who: " + rewardEvent.data.who +
+    ", amount: " + rewardEvent.data.amount +
+    ", type: " + rewardEvent.data.rewardType +
+    ", status: "  + (failed ? "failed" : "success")
+  );
+
+  if (rewardEvent.data.rewardType.eq("Signup")) {
+    console.log("Signup reward")
+  }
+
+  if (rewardEvent.data.rewardType.eq("Referral")) {
+    console.log("Referral reward")
+  }
+
+  if (rewardEvent.data.rewardType.eq("Karma")) {
+    console.log("Karma reward")
+  }
+
+  if (rewardEvent.data.rewardType.eq("Subsidy")) {
+    console.log("Subsidy reward")
+  }
 };
 
 // appreciation callback
-api.callbacks.appreciationEventCallback = (extrinsic, appreciationEvent) => {
-  const failed = api.context.api.events.system.ExtrinsicFailed.is(
-    appreciationEvent.event
-  );
-
+api.callbacks.appreciationEventCallback = (extrinsic, appreciationEvent, failed) => {
   console.log(
     "Appreciation event. From: " +
-      appreciationEvent.event.data.payer +
+      appreciationEvent.data.payer +
       ", to: " +
-      appreciationEvent.event.data.payee +
+      appreciationEvent.data.payee +
       ", amount:" +
-      appreciationEvent.event.data.amount +
+      appreciationEvent.data.amount +
       ", status: " +
       (failed ? "failed" : "success")
   );

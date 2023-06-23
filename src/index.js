@@ -28,8 +28,7 @@ export var callbacks = {
   newUserEventCallback: null,
   transferEventCallback: null,
   appreciationEventCallback: null,
-  signupRewardCallback: null,
-  referralRewardCallback: null,
+  rewardEventCallback: null,
 };
 
 // Init the api with a node's ws url with optional test accounts for testing purposes
@@ -182,18 +181,21 @@ export async function appreciateWithPhoneNumber(
 // end of karmachain transactions
 
 // a default events callback implementation - calls back user-provided callback functions
-export async function accountEventsCallback(extrinsic, events) {
+export async function accountEventsCallback(extrinsic, events, failed) {
   if (context.api.tx.identity.newUser.is(extrinsic)) {
-    const newUserEvent = events.find((event) =>
-      context.api.events.identity.NewUser.is(event.event)
-    );
-    if (newUserEvent) {
-      // get user info
-      const userInfo = await getUserByAccountId(context.users[0].pair.address);
-      if (callbacks.newUserEventCallback !== undefined) {
-        callbacks.newUserEventCallback(extrinsic, newUserEvent, userInfo);
+    events.forEach(async (event) => {
+      if (context.api.events.identity.NewUser.is(event.event)) {
+        // get user info
+        const userInfo = await getUserByAccountId(event.event.data.accountId);
+        if (callbacks.newUserEventCallback !== undefined) {
+          callbacks.newUserEventCallback(extrinsic, event.event, userInfo, failed);
+        }
+      } else if (context.api.events.reward.RewardIssued.is(event.event)) {
+        if (callbacks.rewardEventCallback != undefined) {
+          callbacks.rewardEventCallback(extrinsic, event.event, failed)
+        }
       }
-    }
+    })
   }
 
   if (context.api.tx.balances.transfer.is(extrinsic)) {
@@ -203,33 +205,33 @@ export async function accountEventsCallback(extrinsic, events) {
 
     if (transferEvent) {
       if (callbacks.transferEventCallback !== undefined) {
-        callbacks.transferEventCallback(extrinsic, transferEvent);
+        callbacks.transferEventCallback(extrinsic, transferEvent, failed);
       }
     }
   }
 
   if (context.api.tx.appreciation.appreciation.is(extrinsic)) {
-    const appreciationEvent = events.find((event) =>
-      context.api.events.appreciation.Appreciation.is(event.event)
-    );
-
-    if (appreciationEvent) {
-      if (callbacks.appreciationEventCallback !== undefined) {
-        callbacks.appreciationEventCallback(extrinsic, appreciationEvent);
+    events.forEach((event) => {
+      if (context.api.events.appreciation.Appreciation.is(event.event)) {
+        if (callbacks.appreciationEventCallback !== undefined) {
+          callbacks.appreciationEventCallback(extrinsic, event.event, failed);
+        }
+      } else if (context.api.events.reward.RewardIssued.is(event.event)) {
+        if (callbacks.rewardEventCallback != undefined) {
+          callbacks.rewardEventCallback(extrinsic, event.event, failed)
+        }
       }
-    }
+    })
   }
 
   if (context.api.tx.reward.submitKarmaRewards.is(extrinsic)) {
-    const signupRewardEvent = events.find((event) =>
-      context.api.events.reward.RewardIssued.is(event.event)
-    );
-
-    if (signupRewardEvent) {
-      if (callbacks.appreciationEventCallback !== undefined) {
-        callbacks.signupRewardCallback(extrinsic, signupRewardEvent);
+    events.forEach((event) => {
+      if (context.api.events.reward.RewardIssued.is(event.event)) {
+        if (callbacks.rewardEventCallback != undefined) {
+          callbacks.rewardEventCallback(extrinsic, event.event, failed)
+        }
       }
-    }
+    })
   }
 }
 
@@ -343,8 +345,10 @@ async function subscribeAccountEventsImpl(api, accountId, callback) {
         eventBelongToAccount(event, accountId)
       );
 
+      const failed = events.find((event) => api.events.system.ExtrinsicFailed.is(event));
+
       if (belongToAccount) {
-        callback(extrinsic, events);
+        callback(extrinsic, events, failed);
       }
     });
   });
