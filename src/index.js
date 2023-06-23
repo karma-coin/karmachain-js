@@ -178,6 +178,14 @@ export async function appreciateWithPhoneNumber(
     .signAndSend(keyPair);
 }
 
+export async function simpleTransfer(
+  keyPair,
+  accountId,
+  amount
+) {
+  return context.api.tx.balances.transfer(accountId, amount).signAndSend(keyPair);
+}
+
 // end of karmachain transactions
 
 // a default events callback implementation - calls back user-provided callback functions
@@ -188,14 +196,19 @@ export async function accountEventsCallback(extrinsic, events, failed) {
         // get user info
         const userInfo = await getUserByAccountId(event.event.data.accountId);
         if (callbacks.newUserEventCallback !== undefined) {
-          callbacks.newUserEventCallback(extrinsic, event.event, userInfo, failed);
+          callbacks.newUserEventCallback(
+            extrinsic,
+            event.event,
+            userInfo,
+            failed
+          );
         }
       } else if (context.api.events.reward.RewardIssued.is(event.event)) {
         if (callbacks.rewardEventCallback != undefined) {
-          callbacks.rewardEventCallback(extrinsic, event.event, failed)
+          callbacks.rewardEventCallback(extrinsic, event.event, failed);
         }
       }
-    })
+    });
   }
 
   if (context.api.tx.balances.transfer.is(extrinsic)) {
@@ -218,20 +231,20 @@ export async function accountEventsCallback(extrinsic, events, failed) {
         }
       } else if (context.api.events.reward.RewardIssued.is(event.event)) {
         if (callbacks.rewardEventCallback != undefined) {
-          callbacks.rewardEventCallback(extrinsic, event.event, failed)
+          callbacks.rewardEventCallback(extrinsic, event.event, failed);
         }
       }
-    })
+    });
   }
 
   if (context.api.tx.reward.submitKarmaRewards.is(extrinsic)) {
     events.forEach((event) => {
       if (context.api.events.reward.RewardIssued.is(event.event)) {
         if (callbacks.rewardEventCallback != undefined) {
-          callbacks.rewardEventCallback(extrinsic, event.event, failed)
+          callbacks.rewardEventCallback(extrinsic, event.event, failed);
         }
       }
-    })
+    });
   }
 }
 
@@ -345,7 +358,9 @@ async function subscribeAccountEventsImpl(api, accountId, callback) {
         eventBelongToAccount(event, accountId)
       );
 
-      const failed = events.find((event) => api.events.system.ExtrinsicFailed.is(event));
+      const failed = events.find((event) =>
+        api.events.system.ExtrinsicFailed.is(event)
+      );
 
       if (belongToAccount) {
         callback(extrinsic, events, failed);

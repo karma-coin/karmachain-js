@@ -82,7 +82,8 @@ export default {
         type: "Option<UserInfo>",
       },
       getUserInfoByPhoneNumberHash: {
-        description: "Provides information about user account by `PhoneNumberHash`",
+        description:
+          "Provides information about user account by `PhoneNumberHash`",
         params: [
           {
             name: "phone_number_hash",

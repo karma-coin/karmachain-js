@@ -10,7 +10,12 @@ await api.init(wsUrl, true);
 // setup a bunch of api events callbacks
 
 // new user callback - should call back to dart app
-api.callbacks.newUserEventCallback = (extrinsic, newUserEvent, userInfo, failed) => {
+api.callbacks.newUserEventCallback = (
+  extrinsic,
+  newUserEvent,
+  userInfo,
+  failed
+) => {
   console.log(
     "New user event. User name: " +
       userInfo.user_name +
@@ -23,32 +28,41 @@ api.callbacks.newUserEventCallback = (extrinsic, newUserEvent, userInfo, failed)
 
 // signup reward callback
 api.callbacks.rewardEventCallback = (extrinsic, rewardEvent, failed) => {
-  console.log("Reward event. " +
-    "Who: " + rewardEvent.data.who +
-    ", amount: " + rewardEvent.data.amount +
-    ", type: " + rewardEvent.data.rewardType +
-    ", status: "  + (failed ? "failed" : "success")
+  console.log(
+    "Reward event. " +
+      "Who: " +
+      rewardEvent.data.who +
+      ", amount: " +
+      rewardEvent.data.amount +
+      ", type: " +
+      rewardEvent.data.rewardType +
+      ", status: " +
+      (failed ? "failed" : "success")
   );
 
   if (rewardEvent.data.rewardType.eq("Signup")) {
-    console.log("Signup reward")
+    console.log("Signup reward");
   }
 
   if (rewardEvent.data.rewardType.eq("Referral")) {
-    console.log("Referral reward")
+    console.log("Referral reward");
   }
 
   if (rewardEvent.data.rewardType.eq("Karma")) {
-    console.log("Karma reward")
+    console.log("Karma reward");
   }
 
   if (rewardEvent.data.rewardType.eq("Subsidy")) {
-    console.log("Subsidy reward")
+    console.log("Subsidy reward");
   }
 };
 
 // appreciation callback
-api.callbacks.appreciationEventCallback = (extrinsic, appreciationEvent, failed) => {
+api.callbacks.appreciationEventCallback = (
+  extrinsic,
+  appreciationEvent,
+  failed
+) => {
   console.log(
     "Appreciation event. From: " +
       appreciationEvent.data.payer +
@@ -60,6 +74,10 @@ api.callbacks.appreciationEventCallback = (extrinsic, appreciationEvent, failed)
       (failed ? "failed" : "success")
   );
 };
+
+api.callbacks.transferEventCallback = (extrinsic, transferEvent, failed) => {
+  console.log("Transfer event.");
+}
 
 // subscribe to events using the default callback
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -93,6 +111,14 @@ await api.appreciateWithPhoneNumber(
   100,
   null,
   33
+);
+
+await delay(24000);
+
+await api.simpleTransfer(
+  api.context.users[1].pair,
+  api.context.users[0].pair.address,
+  100
 );
 
 // helper funciton
