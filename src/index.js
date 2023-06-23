@@ -196,6 +196,7 @@ export async function accountEventsCallback(extrinsic, events) {
     }
   }
 
+  // A transfer tx (w/o an appreciation). e.g. from generic web ui
   if (context.api.tx.balances.transfer.is(extrinsic)) {
     const transferEvent = events.find((event) =>
       context.api.events.balances.Transfer.is(event.event)
@@ -208,6 +209,7 @@ export async function accountEventsCallback(extrinsic, events) {
     }
   }
 
+  // An appreciation tx
   if (context.api.tx.appreciation.appreciation.is(extrinsic)) {
     const appreciationEvent = events.find((event) =>
       context.api.events.appreciation.Appreciation.is(event.event)

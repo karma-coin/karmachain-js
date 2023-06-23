@@ -11,17 +11,11 @@ await api.init(wsUrl, true);
 
 // new user callback - should call back to dart app
 api.callbacks.newUserEventCallback = (extrinsic, newUserEvent, userInfo) => {
-  const failed = api.context.api.events.system.ExtrinsicFailed.is(
-    newUserEvent.event
-  );
-
   console.log(
     "New user event. User name: " +
       userInfo.user_name +
       ", phone hash: " +
-      userInfo.phone_number_hash +
-      ", status: " +
-      (failed ? "failed" : "success")
+      userInfo.phone_number_hash
   );
 };
 
@@ -32,19 +26,13 @@ api.callbacks.signupRewardCallback = (extrinsic, signupRewardEvent) => {
 
 // appreciation callback
 api.callbacks.appreciationEventCallback = (extrinsic, appreciationEvent) => {
-  const failed = api.context.api.events.system.ExtrinsicFailed.is(
-    appreciationEvent.event
-  );
-
   console.log(
     "Appreciation event. From: " +
       appreciationEvent.event.data.payer +
       ", to: " +
       appreciationEvent.event.data.payee +
       ", amount:" +
-      appreciationEvent.event.data.amount +
-      ", status: " +
-      (failed ? "failed" : "success")
+      appreciationEvent.event.data.amount
   );
 };
 
