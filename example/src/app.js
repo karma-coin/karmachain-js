@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-undef */
 import * as api from "karmachain2-js/src/index.js";
 
@@ -135,4 +136,4 @@ export function delay(milliseconds) {
   });
 }
 
-// call unsubscribe() to unsubscribe from events...
+// call unsubscribe() to unsubscribe from events
