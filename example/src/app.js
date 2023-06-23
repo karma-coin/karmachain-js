@@ -79,6 +79,12 @@ api.callbacks.transferEventCallback = (extrinsic, transferEvent, failed) => {
   console.log("Transfer event.");
 }
 
+// Fetch blockhain data
+const blockchainData = await api.getBlockchainData();
+const genesisData = await api.getGenesisData();
+console.log(blockchainData.toHuman());
+console.log(genesisData.toHuman());
+
 // subscribe to events using the default callback
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const unsubscribe = await api.subscribeAccountEvents(

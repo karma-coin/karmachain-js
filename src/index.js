@@ -111,6 +111,14 @@ export async function getTransactions(accountId) {
   return context.api.rpc.transactions.getTransactions.raw(accountId);
 }
 
+export async function getBlockchainData() {
+  return context.api.rpc.chain.getBlockchainData()
+}
+
+export async function getGenesisData() {
+  return context.api.rpc.chain.getGenesisData()
+}
+
 export async function subscribeAccountEvents(accountId, callback) {
   return subscribeAccountEventsImpl(context.api, accountId, callback);
 }
