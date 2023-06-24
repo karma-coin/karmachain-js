@@ -18,7 +18,7 @@
     "build": "tsc -b --verbose",
     "clean": "rm -rf dist/*",
     "build-main": "npx webpack --mode production",
-    "build-main-dev": "npx webpack -d --mode development",
+    "build-main-dev": "npx webpack --mode development",
     "publish": "npm publish",
     "lint": "eslint . --ext .js,.ts",
     "test": "npm run setup:verifier && npm run setup:offchain && ava --serial",

@@ -1,21 +1,16 @@
 const path = require("path");
 
 const config = {
-  entry: "./src/wrapper.js",
+  entry: "./src/index.js",
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "main.js",
+    filename: "kc2.js",
   },
   resolve: {
-    extensions: ['.ts', '.js', '.json']
-  },
-  module: {
-    rules: [
-      {
-        test: /\.ts$/,
-        use: "babel-loader",
-        exclude: /node_modules/
-      },
+    extensions: [".js"],
+    modules: [
+      "node_modules", // The default
+      "src",
     ],
   },
 };

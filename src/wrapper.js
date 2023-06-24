@@ -2,7 +2,6 @@
     Example jscript wrapper to be used in dart clients
 */
 
-import "@babel/polyfill";
 import * as api from "./index.js";
 
 // local default node ws endpoint
