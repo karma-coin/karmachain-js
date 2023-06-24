@@ -2,7 +2,8 @@
     Example jscript wrapper to be used in dart clients
 */
 
-import * as api from "index.js";
+import "@babel/polyfill";
+import * as api from "./index.js";
 
 // local default node ws endpoint
 export const wsUrl = "ws://127.0.0.1:9944";
