@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import "@babel/polyfill";
+// import "@babel/polyfill";
 import "./interfaces/augment-api.js";
 import "./interfaces/augment-types.js";
 import * as definitions from "./interfaces/definitions.js";

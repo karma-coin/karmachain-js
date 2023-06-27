@@ -62,3 +62,15 @@ curl --location 'http://localhost:9933/' \
 ```
 yarn publish
 ```
+
+## Esbuild
+
+If you do not have `esbuild` installed use 
+
+```bash
+npm install -g esbuild    
+```
+
+```bash
+esbuild src/index.js --bundle --outfile=dist/kc2.js
+```
