@@ -72,5 +72,5 @@ npm install -g esbuild
 ```
 
 ```bash
-esbuild src/index.js --bundle --outfile=dist/kc2.js
+yarn esbuild
 ```
